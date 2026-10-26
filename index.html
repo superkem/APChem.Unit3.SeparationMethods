@@ -1,0 +1,1433 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Separation Methods Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:wght@600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout concept: a lab-bench workbook. Sticky tab strip, one method per tab, animation card on the left, a fixed three-part answer (difference / use it when / outcome) on the right. */
+:root{
+  --bg:#F4F7FA; --surface:#FFFFFF; --surface2:#EAF1F6; --ink:#12253D; --muted:#506078; --line:#D3DDE8;
+  --teal:#0B7F83; --teal-soft:#DDF1F1; --orange:#C95A00; --orange-soft:#FFEBD9; --on-orange:#FFFFFF;
+  --kp-ink:#066064; --kt-ink:#A24700; --kh-ink:#9B2A78; --kh-soft:rgba(176,57,138,.11);
+  --glass:#5B7390; --liquid:rgba(52,140,200,.22); --jacket:rgba(60,170,220,.35); --paper:rgba(226,208,160,.6);
+  --ether:rgba(238,196,70,.28); --aq:rgba(52,140,200,.28); --wet:rgba(40,150,190,.14); --plate:#F3EFE6; --plate-ink:#12253D; --packing:rgba(110,130,155,.6);
+  --p-solid:#8A5A34; --p-water:#2E7FC1; --p-a:#0B9A9E; --p-b:#E36C09; --p-c:#B0398A;
+  --dye-y:#EDB900; --dye-p:#D63A7B; --dye-b:#2D6CC0; --bean:#6F8A2E;
+  --good:#15803D; --good-soft:#E0F4E7; --bad:#B42318; --bad-soft:#FDE7E4;
+  --f-display:'Bricolage Grotesque','Trebuchet MS',system-ui,sans-serif;
+  --f-body:'Atkinson Hyperlegible','Segoe UI',system-ui,sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0C1626; --surface:#142238; --surface2:#1B2D48; --ink:#E8EEF6; --muted:#9FB1C8; --line:#2A3C58;
+  --teal:#4FD0CC; --teal-soft:#14373D; --orange:#FF9B47; --orange-soft:#3A2614; --on-orange:#1A1206;
+  --kp-ink:#4FD0CC; --kt-ink:#FF9B47; --kh-ink:#F08ACB; --kh-soft:rgba(224,112,189,.18);
+  --glass:#8FA6C2; --liquid:rgba(80,160,220,.28); --jacket:rgba(80,180,230,.3); --paper:rgba(210,195,150,.38);
+  --ether:rgba(255,215,100,.2); --aq:rgba(80,160,220,.3); --wet:rgba(80,180,230,.16); --plate:#DCE2EA; --plate-ink:#1B2638; --packing:rgba(160,180,205,.5);
+  --p-solid:#C9976B; --p-water:#6DB4EE; --p-a:#3FD3D3; --p-b:#FF9B47; --p-c:#E070BD;
+  --dye-y:#F5CC2E; --dye-p:#EE5E95; --dye-b:#5B9BEA; --bean:#A4BE55;
+  --good:#4ADE80; --good-soft:#12301F; --bad:#FF8A7A; --bad-soft:#3A1713; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0C1626; --surface:#142238; --surface2:#1B2D48; --ink:#E8EEF6; --muted:#9FB1C8; --line:#2A3C58;
+  --teal:#4FD0CC; --teal-soft:#14373D; --orange:#FF9B47; --orange-soft:#3A2614; --on-orange:#1A1206;
+  --kp-ink:#4FD0CC; --kt-ink:#FF9B47; --kh-ink:#F08ACB; --kh-soft:rgba(224,112,189,.18);
+  --glass:#8FA6C2; --liquid:rgba(80,160,220,.28); --jacket:rgba(80,180,230,.3); --paper:rgba(210,195,150,.38);
+  --ether:rgba(255,215,100,.2); --aq:rgba(80,160,220,.3); --wet:rgba(80,180,230,.16); --plate:#DCE2EA; --plate-ink:#1B2638; --packing:rgba(160,180,205,.5);
+  --p-solid:#C9976B; --p-water:#6DB4EE; --p-a:#3FD3D3; --p-b:#FF9B47; --p-c:#E070BD;
+  --dye-y:#F5CC2E; --dye-p:#EE5E95; --dye-b:#5B9BEA; --bean:#A4BE55;
+  --good:#4ADE80; --good-soft:#12301F; --bad:#FF8A7A; --bad-soft:#3A1713; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--f-body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1120px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,5.4vw,50px);line-height:1.04;letter-spacing:-.02em;font-weight:700}
+h2{font-size:clamp(22px,3.4vw,30px);line-height:1.15;letter-spacing:-.01em;font-weight:700}
+h3{font-size:19px;font-weight:700;line-height:1.25}
+p{margin:0}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+header.top{padding:28px 0 18px;display:grid;gap:10px}
+.lede{max-width:68ch;color:var(--muted);font-size:17px}
+.legendkw{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;color:var(--muted);align-items:center}
+
+.k{font-weight:700;border-radius:3px;padding:0 2px}
+.kp{color:var(--kp-ink);background:var(--teal-soft)}
+.kt{color:var(--kt-ink);background:var(--orange-soft)}
+.kh{color:var(--kh-ink);background:var(--kh-soft)}
+
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);scrollbar-width:thin}
+.tab{flex:none;font:700 15px var(--f-body);color:var(--muted);background:none;border:0;border-bottom:3px solid transparent;padding:12px 14px 10px;cursor:pointer;white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--orange)}
+.tab:focus-visible,.btn:focus-visible,.opt:focus-visible,.helper button:focus-visible,input:focus-visible,tr.row:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+
+.panel{padding-top:26px;display:grid;gap:44px}
+.block{display:grid;gap:18px}
+.block-head{display:grid;gap:6px}
+.block-head .sub{color:var(--muted);max-width:70ch}
+.block-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:880px){.block-grid{grid-template-columns:minmax(0,1fr)}}
+
+.scene{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;min-width:0}
+.scene svg{display:block;width:100%;height:auto}
+.phase{font:700 14px var(--f-body);color:var(--on-orange);background:var(--orange);display:block;width:fit-content;max-width:100%;padding:4px 12px;border-radius:6px;margin-bottom:8px}
+.scene-bar{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}
+.spd{display:inline-flex;gap:4px;align-items:center;margin-left:auto}
+.spd .spl{font-size:13px;font-weight:700;color:var(--muted);margin-right:2px}
+.spd .btn{padding:6px 10px;font-size:13px}
+.btn{font:700 14px var(--f-body);padding:8px 14px;border-radius:8px;border:1px solid var(--line);background:var(--surface2);color:var(--ink);cursor:pointer}
+.btn:hover{border-color:var(--glass)}
+.btn.primary,.btn[aria-pressed="true"].seg{background:var(--orange);color:var(--on-orange);border-color:var(--orange)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;list-style:none;padding:0;margin:12px 0 0;font-size:14px;color:var(--muted)}
+.legend .dot{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--c);margin-right:6px;vertical-align:-1px}
+
+.info{display:grid;gap:0;min-width:0}
+.prop{background:var(--teal-soft);border-radius:10px;padding:10px 14px;display:grid;gap:2px;margin-bottom:6px}
+.prop span{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--kp-ink)}
+.prop b{font-size:17px}
+.icard{border-top:1px solid var(--line);padding:13px 2px}
+.icard h4{margin:0 0 4px;font:700 12px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--teal)}
+.icard p{font-size:16px}
+.icard.whycard{background:var(--surface);border:1px solid var(--teal);border-radius:10px;padding:12px 14px;margin:8px 0}
+.key{background:var(--orange-soft);border:1px solid var(--orange);border-radius:10px;padding:11px 14px;margin-top:8px;font-size:15.5px}
+.key b.kl{color:var(--kt-ink);font-family:var(--f-display);margin-right:4px}
+code,.mono{font-family:var(--f-mono);font-size:.92em}
+
+.formula{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;background:var(--surface);border:2px solid var(--orange);border-radius:12px;padding:12px 16px}
+.fo-eq{display:flex;align-items:center;gap:12px;font:700 30px var(--f-display)}
+.fo-frac{display:inline-grid;text-align:center;line-height:1.1}
+.fo-frac .fo-d{border-bottom:3px solid var(--ink);padding:0 10px 3px}
+.fo-frac .fo-F{padding:3px 10px 0}
+.fo-d{color:var(--kt-ink)}.fo-F{color:var(--kp-ink)}
+.fo-eq sub{font-size:.55em}
+.fo-text{display:grid;gap:2px;font-size:15px;min-width:200px;flex:1}
+
+svg .glass{fill:none;stroke:var(--glass);stroke-width:3;stroke-linejoin:round;stroke-linecap:round}
+svg .liq{fill:var(--liquid)}
+svg .paper{fill:var(--paper);stroke:var(--glass);stroke-width:1.5;stroke-dasharray:4 3}
+svg .lbl{font:700 15px var(--f-body);fill:var(--ink)}
+svg .lbl.sm{font-size:13px;font-weight:400;fill:var(--muted)}
+svg .lbl.t{fill:var(--p-a)} svg .lbl.o{fill:var(--p-b)}
+svg .pk{font:italic 600 12px var(--f-mono);fill:var(--plate-ink)}
+svg .lead{stroke:var(--muted);stroke-width:1.5;fill:none}
+svg .axis{stroke:var(--muted);stroke-width:1.5;fill:none}
+svg .tube-out{fill:none;stroke:var(--glass);stroke-width:18;stroke-linecap:round;stroke-linejoin:round}
+svg .tube-in{fill:none;stroke:var(--surface);stroke-width:12;stroke-linecap:round;stroke-linejoin:round}
+svg .jacket{fill:none;stroke:var(--jacket);stroke-width:40}
+svg .flame{fill:var(--p-b)}
+svg .ether{fill:var(--ether)} svg .aq{fill:var(--aq)}
+.c-solid{fill:var(--p-solid)}.c-water{fill:var(--p-water)}.c-a{fill:var(--p-a)}.c-b{fill:var(--p-b)}.c-c{fill:var(--p-c)}.c-vap{fill:var(--p-water);fill-opacity:.5}.c-gas{fill:var(--glass);fill-opacity:.7}
+.s-y{fill:var(--dye-y)}.s-p{fill:var(--dye-p)}.s-b{fill:var(--dye-b)}.s-g{fill:var(--muted)}
+
+.ctl{display:grid;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.ctl label{font-weight:700;font-size:14px}
+.ctl input[type=range]{width:100%;accent-color:var(--orange)}
+.ctl .row,.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.readout{font-size:15px;background:var(--surface2);border-radius:10px;padding:10px 12px}
+.readout b{font-family:var(--f-mono);font-weight:500}
+.exbar{display:flex;height:34px;border-radius:8px;overflow:hidden;background:var(--surface2);border:1px solid var(--line)}
+.exbar div{display:grid;place-items:center;font:500 13px var(--f-mono);color:var(--on-orange);white-space:nowrap;overflow:hidden;transition:width .6s ease}
+.exbar .s1{background:var(--orange)}.exbar .s2{background:var(--teal);color:var(--bg)}.exbar .s3{background:var(--p-c);color:#fff}.exbar .left{background:transparent;color:var(--muted)}
+
+table{border-collapse:collapse;width:100%;font-size:15px}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.tbl-wrap table{min-width:720px}
+th,td{padding:10px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{font:700 12px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--kp-ink);background:var(--surface2)}
+tbody tr:nth-child(even){background:var(--surface2)}
+tbody tr:last-child td{border-bottom:0}
+td.m{font-weight:700;white-space:nowrap}
+.rftbl{min-width:0}
+.rftbl tr.row{cursor:pointer}
+.rftbl tr.row.on{outline:2px solid var(--orange);outline-offset:-2px}
+.sw{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+
+.helper{display:grid;gap:14px}
+.helper .choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:8px}
+.helper button.ch{font:inherit;text-align:left;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;display:grid;gap:2px}
+.helper button.ch small{color:var(--muted);font-size:13.5px}
+.helper button.ch[aria-pressed="true"]{border-color:var(--orange);background:var(--orange-soft)}
+.answer{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--orange);border-radius:10px;padding:14px 16px;display:grid;gap:8px}
+.answer h3{color:var(--kt-ink)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:6px;align-content:start}
+.card h3{font-size:17px}
+.steps{margin:0;padding-left:22px;display:grid;gap:8px}
+.steps li::marker{font-weight:700;color:var(--orange)}
+
+.pgroup{display:grid;gap:14px}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:12px}
+.qn{font:700 12px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--teal)}
+.qtext{font-size:17px}
+.figwrap{display:grid;justify-items:start}
+.fig{width:100%;max-width:470px;height:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.fig.sm{max-width:250px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px}
+.opt{font:700 15px var(--f-body);text-align:left;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface2);color:var(--ink);cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--orange)}
+.opt:disabled{cursor:default}
+.opt.ok{background:var(--good-soft);border-color:var(--good);color:var(--ink)}
+.opt.ok::after{content:"  ✓ correct";color:var(--good);font-weight:700}
+.opt.no{background:var(--bad-soft);border-color:var(--bad)}
+.opt.no::after{content:"  ✗ your answer";color:var(--bad);font-weight:700}
+.why{font-size:15.5px;border-left:4px solid var(--teal);padding:2px 0 2px 12px}
+.scorebar{position:sticky;top:calc(env(safe-area-inset-top,0px) + 48px);z-index:4;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between}
+.next{display:flex;justify-content:flex-end}
+footer{margin-top:44px;color:var(--muted);font-size:13.5px}
+.selbox{border-top:1px solid var(--line);padding-top:10px;display:grid;gap:8px}
+.selh{font-weight:700;font-size:14px;margin:0}
+.cmprow{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.cmprow label,.cmprow .pl{font-weight:700;font-size:14px;min-width:76px}
+.cmprow select{font:inherit;font-size:14px;color:var(--ink);background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:6px 8px;max-width:100%}
+.pbar{width:96px;height:9px;border-radius:5px;background:var(--surface2);border:1px solid var(--line);overflow:hidden;display:inline-block}
+.pbar i{display:block;height:100%;width:0;background:var(--orange);transition:width .4s ease}
+.pnote{font-size:13.5px;color:var(--muted)}
+.segs{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.segs .btn{border:0;border-radius:0;background:transparent;border-right:1px solid var(--line);padding:7px 13px;font-size:14px;color:var(--ink)}
+.segs .btn:last-child{border-right:0}
+.segs .btn[aria-pressed="true"]{background:var(--orange);color:var(--on-orange)}
+.segs .btn:focus-visible{outline-offset:-3px}
+.spd .segs .btn{padding:5px 10px;font-size:13px}
+.panelctl{display:grid;gap:12px;margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface2)}
+.panelctl h4{margin:0;font:700 12px var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--teal)}
+.crow{display:grid;grid-template-columns:96px minmax(0,1fr);gap:6px 12px;align-items:center}
+.crl{font-weight:700;font-size:14px;display:flex;align-items:center;gap:4px}
+.crv{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;min-width:0}
+.crv select{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 8px;min-width:150px;max-width:100%}
+.panelctl .readout{background:var(--surface)}
+@media (max-width:560px){.crow{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){.exbar div,.pbar i{transition:none}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">AP Chemistry · Unit 3 · Topic 3.9 · Created by Dr. Tuan Anh</p>
+    <h1>Separating Mixtures</h1>
+    <p class="lede">Each method works because the substances in a mixture differ in one property: particle size, boiling point, solubility or polarity. That difference comes from intermolecular forces (IMFs). Watch each animation, then check the main difference, when to use it, and what you get out.</p>
+    <p class="legendkw"><span>Keyword colors:</span><span class="k kp">property used</span><span class="k kt">key term</span><span class="k kh">apparatus / phase / product</span></p>
+  </header>
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Sections"></nav>
+  <main id="main"></main>
+  <footer>Based on the Topic 3.9 class slides. Solubility values on the curves are rounded textbook values.</footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var NS='http://www.w3.org/2000/svg';
+function mk(tag,attrs,parent){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
+function rnd(i){var x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)}
+function clamp(v,a,b){a=a==null?0:a;b=b==null?1:b;return Math.max(a,Math.min(b,v))}
+function lerp(a,b,t){return a+(b-a)*t}
+function ease(t){t=clamp(t);return t*t*(3-2*t)}
+function setA(e,o){for(var k in o)e.setAttribute(k,typeof o[k]==='number'?+o[k].toFixed(2):o[k])}
+var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+var speed=1;
+
+/* ---------- keyword highlighting ---------- */
+var KP=['boiling points?','vapor pressure','solubility','polarity','volatility','particle size','affinity','molar mass','retention time','London dispersion forces','hydrogen bonds?','mass'];
+var KT=['supercritical','intermolecular forces','IMFs?','non-polar','polar','miscible','precipitate','Rf','like dissolves like','yield','non-volatile','volatile'];
+var KH=['stationary phase','mobile phase','residue','filtrate','distillate','fractions?','condenser','carrier gas','solvent front','baseline','chromatogram','crystals?'];
+var RE=new RegExp('\\b(?:('+KP.join('|')+')|('+KT.join('|')+')|('+KH.join('|')+'))(?![\\w-])','gi');
+var HSEL='.info p,.cards .card p,.steps li,.block-head .sub,.answer p,.why,.tbl-wrap td,.fo-text p';
+function hlNode(root){
+  $$(HSEL,root).forEach(function(el){
+    var w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null),list=[],n;
+    while((n=w.nextNode()))list.push(n);
+    list.forEach(function(tn){
+      var p=tn.parentNode;
+      if(!p||(p.closest&&p.closest('button,svg,.k')))return;
+      var txt=tn.nodeValue,m,last=0,frag=null;RE.lastIndex=0;
+      while((m=RE.exec(txt))){
+        frag=frag||document.createDocumentFragment();
+        if(m.index>last)frag.appendChild(document.createTextNode(txt.slice(last,m.index)));
+        var sp=document.createElement('span');sp.className='k '+(m[1]?'kp':(m[2]?'kt':'kh'));sp.textContent=m[0];frag.appendChild(sp);
+        last=m.index+m[0].length;
+      }
+      if(frag){if(last<txt.length)frag.appendChild(document.createTextNode(txt.slice(last)));p.replaceChild(frag,tn)}
+    });
+  });
+}
+
+/* ---------- scene engine ---------- */
+var S={};
+function reg(id,opt){var svg=$('#'+id);var s={id:id,svg:svg,time:reduce?(opt.rest||0):0,playing:!reduce,dirty:true,tick:null};S[id]=s;return s}
+var last=performance.now();
+function frame(now){
+  var dt=Math.min(.05,(now-last)/1000);last=now;
+  for(var id in S){var s=S[id];
+    if(!s.svg.getClientRects().length||!s.tick)continue;
+    if(s.playing||s.dirty){
+      if(s.playing)s.time+=dt*speed;
+      s.dirty=false;
+      var moving=s.tick(s.time,s.playing?dt*speed:.016);
+      if(moving)s.dirty=true;
+    }
+  }
+  requestAnimationFrame(frame);
+}
+function route(pts){
+  var seg=[],L=0,i;
+  for(i=1;i<pts.length;i++){var l=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]);seg.push(l);L+=l}
+  return function(u){
+    var d=clamp(u)*L;
+    for(var i=0;i<seg.length;i++){
+      if(d<=seg[i]||i===seg.length-1){var f=seg[i]?Math.min(1,d/seg[i]):1;return [pts[i][0]+(pts[i+1][0]-pts[i][0])*f,pts[i][1]+(pts[i+1][1]-pts[i][1])*f]}
+      d-=seg[i];
+    }
+  };
+}
+function spawn(g,n,cls,r,make,dur,hold,spread){
+  var arr=[];for(var i=0;i<n;i++){arr.push({c:mk('circle',{r:r,class:cls,cx:-50,cy:-50},g),f:make(i),ph:i/n})}
+  return {arr:arr,dur:dur,hold:hold||0,spread:spread==null?1:spread};
+}
+function step(sp,t){
+  var w=sp.hold;
+  sp.arr.forEach(function(p){
+    var u=((t/sp.dur)+p.ph*sp.spread)%1;
+    var q=p.f(Math.min(1,u/(1-w)));
+    var o=u<.05?u/.05:(u>.95?(1-u)/.05:1);
+    setA(p.c,{cx:q[0],cy:q[1],opacity:o});
+  });
+}
+function jigs(g,n,cls,r,home,amp){
+  var a=[];for(var i=0;i<n;i++){var h=home(i);a.push({c:mk('circle',{r:r,class:cls},g),x:h[0],y:h[1],s:i+1})}
+  return {a:a,amp:amp||3};
+}
+function stepJ(j,t,k){
+  k=k==null?1:k;
+  j.a.forEach(function(p){setA(p.c,{cx:p.x+Math.sin(t*2.3+p.s*9)*j.amp*k,cy:p.y+Math.cos(t*1.9+p.s*5)*j.amp*k})});
+}
+
+/* ---------- html builders ---------- */
+function li(c,t){return '<li><i class="dot" style="--c:var('+c+')"></i>'+t+'</li>'}
+function speedBtns(){
+  return '<span class="spd" role="group" aria-label="Animation speed"><span class="spl">Speed</span><span class="segs">'+
+  [['0.5','Slow'],['1','Medium'],['1.8','Fast']].map(function(a){return '<button class="btn seg" data-speed="'+a[0]+'" aria-pressed="'+(+a[0]===1?'true':'false')+'">'+a[1]+'</button>'}).join('')+'</span></span>';
+}
+function card(id,vb,aria,inner,legend,o){
+  o=o||{};
+  return '<div class="scene">'+(o.top||'')+'<svg id="'+id+'" viewBox="'+vb+'" role="img" aria-label="'+aria+'">'+inner+'</svg>'+
+  '<div class="scene-bar"><button class="btn" data-play="'+id+'">Pause</button><button class="btn" data-replay="'+id+'">'+(o.replay||'Replay')+'</button>'+speedBtns()+'</div>'+
+  '<ul class="legend">'+legend+'</ul>'+(o.after||'')+'</div>';
+}
+function info(o){
+  return '<div class="info"><p class="prop"><span>Property used</span><b>'+o.prop+'</b></p>'+
+  (o.why?'<div class="icard whycard"><h4>Why they separate</h4><p>'+o.why+'</p></div>':'')+
+  '<div class="icard"><h4>Main difference</h4><p>'+o.diff+'</p></div>'+
+  '<div class="icard"><h4>Use it when</h4><p>'+o.use+'</p></div>'+
+  '<div class="icard"><h4>Expected outcome</h4><p>'+o.out+'</p></div>'+
+  (o.extra||'')+
+  (o.key?'<p class="key"><b class="kl">Key idea</b>'+o.key+'</p>':'')+'</div>';
+}
+function block(title,sub,left,right){
+  return '<article class="block"><div class="block-head"><h2>'+title+'</h2><p class="sub">'+sub+'</p></div><div class="block-grid">'+left+right+'</div></article>';
+}
+function nextBtn(to,label){return '<div class="next"><button class="btn primary" data-go="'+to+'">'+label+' →</button></div>'}
+function formula(){
+  return '<div class="formula"><div class="fo-eq"><span>R<sub>f</sub></span><span>=</span><span class="fo-frac"><span class="fo-d">d</span><span class="fo-F">F</span></span></div>'+
+  '<div class="fo-text"><p><b class="fo-d">d</b> = distance moved by the spot (baseline to the center of the spot)</p><p><b class="fo-F">F</b> = distance moved by the solvent front (baseline to the front)</p><p>No units. Always between 0 and 1.</p></div></div>';
+}
+
+/* ---------- SVG scenes (markup) ---------- */
+var svgFilt=
+ '<polygon class="liq" points="212,282 308,282 350,310 170,310"/>'+
+ '<polygon class="paper" points="186,99 260,183 334,99"/>'+
+ '<polygon class="glass" points="170,95 350,95 275,195 245,195"/>'+
+ '<rect class="glass" x="248" y="195" width="24" height="46"/>'+
+ '<polygon class="glass" points="238,241 238,265 170,310 350,310 282,265 282,241"/>'+
+ '<g id="filt-g"></g>'+
+ '<text class="lbl" x="372" y="146">Residue</text><text class="lbl sm" x="372" y="164">stays on the paper</text><path class="lead" d="M368,142 L318,132"/>'+
+ '<text class="lbl" x="372" y="276">Filtrate</text><text class="lbl sm" x="372" y="294">passes through</text><path class="lead" d="M368,272 L330,288"/>'+
+ '<text class="lbl" x="260" y="18" text-anchor="middle">Mixture poured in</text>';
+
+function rcChart(){
+  return '<line class="axis" x1="290" y1="250" x2="500" y2="250"/><line class="axis" x1="290" y1="250" x2="290" y2="40"/>'+
+  '<text class="lbl sm" x="292" y="32">Solubility (g per 100 g water)</text>'+
+  '<g id="rc-ticks"></g><path id="rc-k" fill="none" stroke="var(--p-b)" stroke-width="3.5"/><path id="rc-n" fill="none" stroke="var(--p-a)" stroke-width="3.5"/>'+
+  '<text class="lbl o" x="486" y="50" text-anchor="end">KNO₃</text><text class="lbl t" x="486" y="196" text-anchor="end">NaCl</text>'+
+  '<line id="rc-m90" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 4" y1="250" y2="40"/>'+
+  '<line id="rc-mT" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 4" y1="250" y2="40"/>'+
+  '<circle id="rc-c90" r="5" fill="var(--ink)"/><circle id="rc-cT" r="5" fill="var(--orange)"/>'+
+  '<text class="lbl sm" x="395" y="284" text-anchor="middle">Temperature (°C)</text>';
+}
+var svgRC=
+ '<text id="rc-temp" class="lbl" x="150" y="30" text-anchor="middle"></text>'+
+ '<rect class="liq" x="61" y="95" width="178" height="176"/>'+
+ '<rect id="rc-cry" x="80" y="262" width="0" height="0" rx="4" fill="var(--orange-soft)" stroke="var(--orange)" stroke-width="1.4" opacity=".95"/>'+
+ '<path class="glass" d="M60,50 L60,265 Q60,272 67,272 L233,272 Q240,272 240,265 L240,50"/>'+
+ '<g id="rc-slots"></g>'+rcChart();
+
+var svgEv=
+ '<defs><clipPath id="ev-clip"><path d="M150,185 L370,185 Q362,248 260,248 Q158,248 150,185 Z"/></clipPath></defs>'+
+ '<rect id="ev-water" class="liq" x="150" y="185" width="220" height="63" clip-path="url(#ev-clip)"/>'+
+ '<path class="glass" d="M150,185 L370,185 Q362,248 260,248 Q158,248 150,185 Z"/>'+
+ '<path class="glass" d="M130,262 L390,262 M150,262 L134,298 M370,262 L386,298"/>'+
+ '<path id="ev-flame" class="flame" d="M260,296 C240,296 244,276 260,264 C276,276 280,296 260,296 Z"/>'+
+ '<g id="ev-g"></g>'+
+ '<text class="lbl" x="260" y="22" text-anchor="middle">Water escapes as vapor (lost)</text>'+
+ '<text class="lbl" x="405" y="244">Solid left</text><text class="lbl sm" x="405" y="262">behind in the dish</text><path class="lead" d="M400,240 L335,236"/>'+
+ '<text class="lbl sm" x="300" y="292">Heat</text>';
+
+var svgSD=
+ '<defs><clipPath id="sd-clip"><circle cx="100" cy="215" r="53"/></clipPath><clipPath id="sd-bclip"><rect x="386" y="245" width="88" height="64"/></clipPath></defs>'+
+ '<path class="jacket" d="M185,120 L365,194"/>'+
+ '<rect class="liq" x="40" y="200" width="120" height="75" clip-path="url(#sd-clip)"/>'+
+ '<circle class="glass" cx="100" cy="215" r="55"/>'+
+ '<path class="tube-out" d="M100,166 L100,112 L165,112 L390,205"/><path class="tube-in" d="M100,166 L100,112 L165,112 L390,205"/>'+
+ '<rect id="sd-liq" class="liq" x="386" y="300" width="88" height="9" clip-path="url(#sd-bclip)"/>'+
+ '<path class="glass" d="M385,245 L385,305 Q385,310 390,310 L470,310 Q475,310 475,305 L475,245"/>'+
+ '<path class="glass" d="M60,282 L140,282"/><path id="sd-flame" class="flame" d="M100,320 C86,320 88,302 100,292 C112,302 114,320 100,320 Z"/>'+
+ '<g id="sd-g"></g>'+
+ '<text class="lbl" x="200" y="92">Condenser (cold water)</text>'+
+ '<text class="lbl" x="178" y="252">Salt stays in the flask</text><text class="lbl sm" x="178" y="270">(non-volatile)</text>'+
+ '<text class="lbl" x="430" y="332" text-anchor="middle">Pure water</text>';
+
+var svgFD=
+ '<defs><clipPath id="fd-clip"><circle cx="90" cy="305" r="53"/></clipPath><clipPath id="fd-bclip"><rect x="396" y="275" width="98" height="75"/></clipPath>'+
+ '<pattern id="fd-beads" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r="2.8" fill="none" style="stroke:var(--glass)" stroke-width="1"/></pattern></defs>'+
+ '<path class="jacket" d="M178,78 L372,167" style="stroke-width:36"/>'+
+ '<rect x="74" y="70" width="32" height="182" fill="url(#fd-beads)"/>'+
+ '<path class="glass" d="M74,70 L74,252 M106,70 L106,252"/>'+
+ '<rect class="liq" x="35" y="290" width="110" height="70" clip-path="url(#fd-clip)"/>'+
+ '<circle class="glass" cx="90" cy="305" r="55"/>'+
+ '<path class="tube-out" d="M90,70 L90,66 L150,66 L395,178"/><path class="tube-in" d="M90,70 L90,66 L150,66 L395,178"/>'+
+ '<rect x="87" y="30" width="6" height="40" rx="3" fill="none" style="stroke:var(--glass)" stroke-width="2"/><rect x="88.5" y="46" width="3" height="24" style="fill:var(--p-b)"/>'+
+ '<rect id="fd-liq" class="liq" x="396" y="340" width="98" height="9" clip-path="url(#fd-bclip)"/>'+
+ '<path class="glass" d="M395,275 L395,345 Q395,350 400,350 L490,350 Q495,350 495,345 L495,275"/>'+
+ '<path class="glass" d="M50,366 L130,366"/><path id="fd-flame" class="flame" d="M90,398 C76,398 78,380 90,370 C102,380 104,398 90,398 Z"/>'+
+ '<g id="fd-g"></g>'+
+ '<text class="lbl" x="120" y="150">Fractionating column</text><text class="lbl sm" x="120" y="168">evaporate, condense, repeat</text>'+
+ '<text class="lbl" x="215" y="52">Condenser</text>'+
+ '<text class="lbl" x="160" y="318">Mixture of</text><text class="lbl" x="160" y="336">two liquids</text>'+
+ '<text class="lbl" x="445" y="376" text-anchor="middle">Collected first</text>';
+
+var exBody='M196,62 L224,62 C300,100 308,200 258,252 L229,288 L229,316 L191,316 L191,288 L162,252 C112,200 120,100 196,62 Z';
+var exFlask='M198,336 L198,354 L166,408 Q163,415 170,415 L250,415 Q257,415 254,408 L222,354 L222,336';
+var svgEX=
+ '<defs><clipPath id="ex-clip"><path d="'+exBody+'"/></clipPath><clipPath id="ex-fclip"><path d="'+exFlask+' Z"/></clipPath></defs>'+
+ '<g id="ex-fun">'+
+ '<rect id="ex-ether" class="ether" x="100" y="190" width="220" height="0" clip-path="url(#ex-clip)"/>'+
+ '<rect id="ex-aq" class="aq" x="100" y="190" width="220" height="130" clip-path="url(#ex-clip)"/>'+
+ '<path class="glass" d="'+exBody+'"/><rect class="glass" x="198" y="40" width="24" height="22" rx="3"/>'+
+ '<path class="glass" d="M180,300 L240,300"/><circle cx="244" cy="300" r="4" style="fill:var(--glass)"/></g>'+
+ '<line id="ex-pour" x1="210" x2="210" y1="14" y2="60" style="stroke:var(--dye-y)" stroke-width="5" stroke-linecap="round" opacity="0"/>'+
+ '<line id="ex-stream" x1="210" x2="210" y1="316" y2="400" style="stroke:var(--p-water)" stroke-width="3" stroke-linecap="round" opacity="0"/>'+
+ '<rect id="ex-fliq" class="aq" x="160" y="415" width="100" height="0" clip-path="url(#ex-fclip)"/>'+
+ '<path class="glass" d="'+exFlask+'"/>'+
+ '<rect id="ex-bliq" class="ether" x="391" y="412" width="98" height="0"/>'+
+ '<path class="glass" d="M390,335 L390,408 Q390,413 395,413 L485,413 Q490,413 490,408 L490,335"/>'+
+ '<g id="ex-gd"></g>'+
+ '<text class="lbl" x="322" y="130">Ether layer</text><text class="lbl sm" x="322" y="148">top (less dense)</text>'+
+ '<text class="lbl" x="322" y="258">Water layer</text><text class="lbl sm" x="322" y="276">bottom (denser)</text>'+
+ '<text class="lbl" x="210" y="437" text-anchor="middle">Small flask: water layer</text>'+
+ '<text class="lbl" x="440" y="437" text-anchor="middle">Ether extracts</text>';
+
+var svgCL=
+ '<defs><clipPath id="cl-clip"><rect x="209" y="105" width="62" height="161"/></clipPath>'+
+ '<pattern id="cl-pat" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="2.5" cy="2.5" r="1.5" style="fill:var(--packing)"/><circle cx="7" cy="7" r="1.5" style="fill:var(--packing)"/></pattern></defs>'+
+ '<rect class="liq" x="209" y="60" width="62" height="45"/>'+
+ '<rect x="209" y="105" width="62" height="161" fill="url(#cl-pat)"/>'+
+ '<g clip-path="url(#cl-clip)"><rect id="cl-y" x="210" y="105" width="60" height="16" style="fill:var(--dye-y)" opacity=".9"/><rect id="cl-b" x="210" y="105" width="60" height="16" style="fill:var(--dye-b)" opacity=".6"/></g>'+
+ '<path class="glass" d="M208,50 L208,268 L230,288 L230,302 L250,302 L250,288 L272,268 L272,50"/>'+
+ '<path class="glass" d="M222,296 L258,296"/>'+
+ '<g id="cl-rack">'+
+ [180,240,300].map(function(x,k){return '<rect id="cl-f'+k+'" x="'+(x-13)+'" y="362" width="26" height="0" fill="var(--liquid)"/><path class="glass" d="M'+(x-14)+',318 L'+(x-14)+',358 Q'+(x-14)+',364 '+x+',364 Q'+(x+14)+',364 '+(x+14)+',358 L'+(x+14)+',318"/>'}).join('')+
+ '</g><circle id="cl-drip" r="3.5" cx="240" cy="304" style="fill:var(--p-water)"/>'+
+ '<text class="lbl" x="285" y="84">Solvent flows down</text>'+
+ '<text class="lbl" x="285" y="190">Silica packing</text><text class="lbl sm" x="285" y="208">polar stationary phase</text>'+
+ '<text class="lbl" x="240" y="388" text-anchor="middle">Collected fractions</text>';
+
+var svgCR=
+ '<defs><clipPath id="cr-clip"><rect x="31" y="70" width="58" height="130"/></clipPath>'+
+ '<pattern id="cr-pat" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="2.5" cy="2.5" r="1.5" style="fill:var(--packing)"/><circle cx="7" cy="7" r="1.5" style="fill:var(--packing)"/></pattern></defs>'+
+ '<g id="cr-col"><rect class="liq" x="31" y="30" width="58" height="40"/>'+
+ '<rect x="31" y="70" width="58" height="130" fill="url(#cr-pat)"/>'+
+ '<g clip-path="url(#cr-clip)"><rect id="cr-a" x="32" y="70" width="56" height="14" fill="none" style="stroke:var(--muted)" stroke-dasharray="4 3" stroke-width="1.5"/><rect id="cr-b" x="32" y="70" width="56" height="14" fill="none" style="stroke:var(--muted)" stroke-dasharray="4 3" stroke-width="1.5"/></g>'+
+ '<path class="glass" d="M30,20 L30,200 L52,220 L52,234 L68,234 L68,220 L90,200 L90,20"/><path class="glass" d="M44,228 L76,228"/>'+
+ '<text class="lbl sm" x="100" y="112">Compounds are colorless:</text><text class="lbl sm" x="100" y="130">the bands are invisible</text></g>'+
+ '<g id="cr-rack">'+
+ [0,1,2,3,4,5].map(function(k){var x=40+46*k;return '<rect id="cr-f'+k+'" x="'+(x-13)+'" y="346" width="26" height="0" fill="var(--liquid)"/><path class="glass" d="M'+(x-14)+',290 L'+(x-14)+',340 Q'+(x-14)+',346 '+x+',346 Q'+(x+14)+',346 '+(x+14)+',340 L'+(x+14)+',290"/><text class="lbl sm" x="'+x+'" y="366" text-anchor="middle">F'+(k+1)+'</text>'}).join('')+
+ '</g><circle id="cr-drip" r="3.5" cx="60" cy="236" style="fill:var(--p-water)"/>'+
+ '<text class="lbl sm" x="20" y="392">Collect many small fractions, one tube at a time</text>'+
+ '<rect x="310" y="40" width="240" height="300" rx="4" style="fill:var(--plate);stroke:var(--glass)" stroke-width="1.5"/>'+
+ '<line x1="316" x2="544" y1="300" y2="300" style="stroke:var(--plate-ink)" stroke-width="1.2" opacity=".55"/>'+
+ '<line id="cr-front" x1="310" x2="550" y1="300" y2="300" stroke="var(--teal)" stroke-width="2" opacity="0"/>'+
+ '<g id="cr-spots"></g><g id="cr-rings"></g><g id="cr-lab"></g><g id="cr-pip"></g>'+
+ '<g id="cr-lamp" opacity="0"><polygon points="360,24 500,24 540,50 320,50" style="fill:var(--p-c)" opacity=".28"/><rect x="340" y="2" width="180" height="24" rx="7" style="fill:var(--p-c)"/><text class="lbl" x="430" y="19" text-anchor="middle" style="fill:#fff;font-size:14px">UV lamp or stain</text></g>'+
+ '<text class="lbl sm" x="430" y="360" text-anchor="middle">A, B: reference compounds</text><text class="lbl sm" x="430" y="378" text-anchor="middle">1 to 6: fractions from the column</text>';
+
+var svgGC=
+ '<defs><clipPath id="gc-clip"><rect id="gc-cr" x="38" y="86" width="0" height="140"/></clipPath></defs>'+
+ '<rect x="20" y="14" width="70" height="56" rx="6" fill="none" class="glass"/><text class="lbl" x="55" y="46" text-anchor="middle">Inject</text>'+
+ '<rect x="130" y="8" width="270" height="68" rx="8" fill="none" class="glass" stroke-dasharray="6 5"/><text class="lbl sm" x="265" y="22" text-anchor="middle">Column in oven</text>'+
+ '<path id="gc-coil" fill="none" style="stroke:var(--glass)" stroke-width="1.5" opacity=".6"/>'+
+ '<rect x="430" y="14" width="70" height="56" rx="6" fill="none" class="glass"/><text class="lbl" x="465" y="46" text-anchor="middle">Detect</text>'+
+ '<g id="gc-g"></g>'+
+ '<line class="axis" x1="40" y1="215" x2="500" y2="215"/><line class="axis" x1="40" y1="215" x2="40" y2="88"/>'+
+ '<text class="lbl sm" x="500" y="234" text-anchor="end">Retention time →</text>'+
+ '<path id="gc-trace" fill="none" stroke="var(--ink)" stroke-width="2.5" clip-path="url(#gc-clip)"/>'+
+ '<line id="gc-cur" y1="88" y2="215" stroke="var(--orange)" stroke-width="1.5" stroke-dasharray="4 4"/>'+
+ '<text id="gc-la" class="lbl t" text-anchor="middle">A</text><text id="gc-lb" class="lbl o" text-anchor="middle">B</text><text id="gc-lc" class="lbl" style="fill:var(--p-c)" text-anchor="middle">C</text>';
+
+var svgTL=
+ '<path class="glass" d="M10,24 L10,362 Q10,368 16,368 L378,368 Q384,368 384,362 L384,24"/>'+
+ '<defs><pattern id="tl-pp1" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="1.6" style="fill:var(--p-water)"/><circle cx="11" cy="11" r="1.6" style="fill:var(--p-water)"/></pattern><pattern id="tl-pp2" width="12" height="14" patternUnits="userSpaceOnUse"><path d="M3,2 L3,11 M9,4 L9,13" fill="none" style="stroke:var(--p-b)" stroke-width="1.8" stroke-linecap="round"/></pattern></defs>'+
+ '<g id="tl-plate">'+
+ '<path d="M150,-30 L176,36 M214,-30 L188,36" fill="none" style="stroke:var(--glass)" stroke-width="3" stroke-linecap="round"/>'+
+ '<rect x="40" y="36" width="260" height="309" rx="4" style="fill:var(--plate);stroke:var(--glass)" stroke-width="1.5"/>'+
+ '<rect id="tl-psi" x="40" y="36" width="260" height="309" rx="4" fill="url(#tl-pp1)" opacity=".5"/>'+
+ '<rect id="tl-pc18" x="40" y="36" width="260" height="309" rx="4" fill="url(#tl-pp2)" opacity="0"/>'+
+ '<rect id="tl-wet" x="40" y="322" width="260" height="23" fill="var(--wet)" opacity="0"/>'+
+ '<line id="tl-front" x1="40" x2="300" y1="322" y2="322" stroke="var(--teal)" stroke-width="2" opacity="0"/>'+
+ '<line id="tl-bl" x1="46" x2="46" y1="290" y2="290" style="stroke:var(--plate-ink)" stroke-width="1.4" opacity=".7"/>'+
+ '<g id="tl-xm" opacity="0"></g>'+
+ '<line id="tl-gd" x1="40" x2="300" stroke-width="1.5" stroke-dasharray="4 3" visibility="hidden" style="stroke:var(--plate-ink)" opacity=".6"/>'+
+ '<g id="tl-spots"></g><g id="tl-ring"></g>'+
+ '<line id="tl-pf" x1="40" x2="40" y1="50" y2="50" style="stroke:var(--plate-ink)" stroke-width="1.6" opacity=".8"/>'+
+ '<g id="tl-lab"></g>'+
+ '<g id="tl-cap" opacity="0"><line x1="0" y1="0" x2="28" y2="-62" style="stroke:var(--glass)" stroke-width="3" stroke-linecap="round"/><circle id="tl-drop" cx="0" cy="0" r="3.8"/></g>'+
+ '<g id="tl-dim" visibility="hidden"><line id="tl-dl" x1="322" x2="322" stroke-width="3"/><line id="tl-fl" x1="346" x2="346" style="stroke:var(--teal)" stroke-width="3"/>'+
+ '<text id="tl-dt" class="lbl" x="327" y="0" style="fill:var(--kt-ink)">d</text><text id="tl-ft" class="lbl" x="351" y="0" style="fill:var(--kp-ink)">F</text></g>'+
+ '</g>'+
+ '<rect x="11" y="322" width="372" height="45" class="liq" opacity=".9"/>'+
+ '<text id="tl-svt" class="lbl sm" x="196" y="350" text-anchor="middle">solvent: level is below the pencil line</text>'+
+ '<g id="tl-lid"><rect x="6" y="17" width="382" height="7" rx="3" style="fill:var(--surface);stroke:var(--glass)" stroke-width="2.5"/><rect x="188" y="10" width="18" height="7" rx="3" style="fill:var(--glass)"/></g>';
+
+/* ---------- panels ---------- */
+var TABS=[['overview','Overview'],['filtration','Filtration'],['evaporation','Evaporation & distillation'],['fractional','Fractional distillation'],['extraction','Solvent extraction'],['column','Column & gas'],['tlc','TLC analysis'],['practice','Practice']];
+
+var HELP=[
+ {t:'An undissolved solid in a liquid',s:'Sand in water, a precipitate',r:'Filtration',w:'The solid particles are too big to pass through filter paper, so they stay on it.',go:[['filtration','Open Filtration']]},
+ {t:'A dissolved solid, and I want the solid',s:'Salt from sea water, KNO₃ from a solution',r:'Evaporation, or recrystallization',w:`Boil the solvent away and the solid stays. If the solid's solubility drops a lot on cooling (like KNO₃), you can instead cool a hot saturated solution and filter the crystals.`,go:[['evaporation','Evaporation'],['filtration','Recrystallization']]},
+ {t:'A dissolved solid, and I want the pure solvent',s:'Drinking water from sea water',r:'Simple distillation',w:'The solvent boils off, is cooled in a condenser and collected. The non-volatile solid stays in the flask.',go:[['evaporation','Open Distillation']]},
+ {t:'Two or more liquids that mix',s:'Ether, acetone and ethanol; heptane and octane',r:'Fractional distillation',w:'Liquids with weaker IMFs have a higher vapor pressure and a lower boiling point, so they reach the condenser first.',go:[['fractional','Open Fractional distillation']]},
+ {t:'A substance dissolved in one liquid, and a second liquid that does not mix',s:'Caffeine in tea, iodine in water',r:'Solvent extraction',w:'The substance moves into whichever solvent has IMFs most like its own ("like dissolves like"). Then the layers are separated.',go:[['extraction','Open Solvent extraction']]},
+ {t:'Several dissolved compounds that look alike',s:'Dyes, pigments, plant extracts',r:'Chromatography',w:'Tiny sample, just to analyze: paper or TLC. Need to collect real amounts of each part: column chromatography.',go:[['tlc','TLC analysis'],['column','Column chromatography']]},
+ {t:'A substance trapped inside a solid',s:'Caffeine in coffee beans or tea leaves, oil in seeds',r:'Solid–liquid extraction',w:'Soak or flush the solid with a solvent that dissolves only the wanted substance (water, supercritical CO₂ or an organic solvent), then collect the solution.',go:[['extraction','Open Solid–liquid extraction']]}
+];
+
+var TBL=[
+ ['Filtration','Undissolved solid from a liquid','Particle size','Residue on the paper, filtrate in the flask','filtration'],
+ ['Recrystallization','Dissolved solid with a steep solubility curve','Solubility changes with temperature','Pure crystals; yield is never 100%','filtration'],
+ ['Evaporation','Dissolved solid from its solvent','Volatility','Solid left; solvent is lost','evaporation'],
+ ['Simple distillation','Solvent from a non-volatile solute','Boiling point','Pure solvent collected; solid left behind','evaporation'],
+ ['Fractional distillation','Liquids that mix','Boiling point (IMF strength)','Fractions in order of boiling point','fractional'],
+ ['Solvent extraction','A solute between two liquids that do not mix','Solubility in each solvent','Solute ends up mostly in the better solvent','extraction'],
+ ['Solid–liquid extraction','A substance trapped inside a solid (coffee, tea)','Solubility in the solvent','Treated solid plus a solution of the extract','extraction'],
+ ['Column chromatography','Dissolved compounds; collect each in quantity','Affinity (attraction) for the stationary phase','Separate fractions collected at the bottom','column'],
+ ['Paper / TLC','Dissolved compounds; analyze a tiny sample','Affinity (attraction) for the plate','Chromatogram with spots; Rf values','tlc'],
+ ['Gas chromatography','Volatile mixtures','Mass and volatility','Peaks and retention times','column']
+];
+
+function panelOverview(){
+  var ch=HELP.map(function(h,i){return '<button class="ch" data-help="'+i+'" aria-pressed="false"><b>'+h.t+'</b><small>'+h.s+'</small></button>'}).join('');
+  var rows=TBL.map(function(r){return '<tr><td class="m">'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[3]+'</td><td><button class="btn" data-go="'+r[4]+'">Open</button></td></tr>'}).join('');
+  return '<div class="block"><div class="block-head"><h2>Which method do I use?</h2><p class="sub">Pick what your mixture looks like. The answer comes with the reason.</p></div>'+
+  '<div class="helper"><div class="choices">'+ch+'</div><div class="answer" id="help-ans"><p class="eyebrow">Start here</p><p>Choose a mixture above to see the method that fits.</p></div></div></div>'+
+  '<div class="block"><div class="block-head"><h2>The big idea</h2></div><div class="cards">'+
+  '<div class="card"><h3>Filtration cannot split a solution</h3><p>Dissolved particles are tiny and pass through filter paper. Every other method here uses a difference in how the substances interact: with heat, with a second solvent, or with a surface.</p></div>'+
+  '<div class="card"><h3>Weaker IMFs go first</h3><p>In distillation, weaker IMFs mean higher vapor pressure and a lower boiling point, so that liquid evaporates first. In chromatography, weaker attraction to the stationary phase means the component travels further.</p></div>'+
+  '<div class="card"><h3>Like dissolves like</h3><p>A substance dissolves best in a solvent with similar IMFs. This decides where a solute goes in extraction and how far a dye moves in chromatography.</p></div></div></div>'+
+  '<div class="block"><div class="block-head"><h2>All methods side by side</h2></div><div class="tbl-wrap"><table><thead><tr><th>Method</th><th>Separates</th><th>Why it separates</th><th>Outcome</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div></div>'+
+  nextBtn('filtration','Start with filtration');
+}
+
+function panelFiltration(){
+  var fl=card('filt','0 0 520 330','Animation of filtration: large solid particles stay on the filter paper while tiny dissolved particles pass into the flask',svgFilt,
+    li('--p-solid','Undissolved solid (large)')+li('--p-water','Dissolved particles (tiny)'));
+  var fi=info({prop:'Particle size',
+    diff:'It only separates an undissolved solid from a liquid. Dissolved particles are tiny and slip through the paper with the liquid, so filtration cannot split a solution.',
+    use:'The solid is visibly there: sand in water, or a precipitate such as yellow PbI₂ after mixing KI(aq) with Pb(NO₃)₂(aq).',
+    out:'Residue (solid) on the paper. Filtrate (clear liquid, with anything dissolved still in it) in the flask.',
+    key:'Trick: add a chemical so the dissolved substance becomes a solid (a precipitate, KI(aq) → PbI₂(s)), then filter. This changes the substance.'});
+  var rc=card('rc','0 0 520 300','Recrystallization: cooling a hot saturated solution makes crystals form, shown with a solubility curve for KNO3 and NaCl',svgRC,
+    '<li><i class="dot" style="--c:var(--p-b)"></i><span id="rc-lc">Cation (K⁺)</span></li><li><i class="dot" style="--c:var(--p-a)"></i><span id="rc-la">Anion (NO₃⁻)</span></li><li><i class="dot" style="--c:var(--orange)"></i>Crystal: a cation and an anion joined, stacking at the bottom</li>',
+    {replay:'Cool down again',after:'<div class="panelctl"><h4>Controls</h4>'+
+    '<div class="crow"><span class="crl">Compound</span><div class="crv"><span class="segs" role="group" aria-label="Compound"><button class="btn seg" data-rc="KNO3" aria-pressed="true">KNO₃</button><button class="btn seg" data-rc="NaCl" aria-pressed="false">NaCl</button></span></div></div>'+
+    '<div class="crow"><label class="crl" for="rc-T">Temperature</label><div class="crv" style="flex-wrap:nowrap"><input id="rc-T" type="range" min="20" max="90" value="90" step="1" style="flex:1;min-width:0;accent-color:var(--orange)"><b class="mono" style="min-width:60px;text-align:right"><span id="rc-Tv">90</span> °C</b></div></div>'+
+    '<p class="readout" id="rc-out"></p><p class="readout" id="rc-ions"></p></div>'});
+  var ri=info({prop:'Solubility changes with temperature',
+    diff:'A hot saturated solution is cooled so the solid can no longer stay dissolved and crystallizes. Then the crystals are filtered off. The steeper the solubility curve, the better the yield.',
+    use:'The solid dissolves much better when hot than cold (KNO₃: about 202 g per 100 g water at 90 °C but 46 g at 30 °C). It does not work well for NaCl, whose curve is almost flat.',
+    out:'Crystals on the filter paper. Soluble impurities mostly stay in the liquid. Some product always stays dissolved, so you cannot recover all of it.',
+    key:'Compare curves. The compound with the biggest drop between hot and cold gives the greatest percentage recovered.'});
+  return block('Filtration','Separating an undissolved solid from a liquid.',fl,fi)+
+  block('Recrystallization','Filtering after cooling: how to get a dissolved solid out of its solution.',rc,ri)+nextBtn('evaporation','Next: evaporation & distillation');
+}
+
+function panelEvap(){
+  var ev=card('ev','0 0 520 300','Evaporation: heating a dish of salt water, water leaves as vapor and salt crystals remain',svgEv,li('--p-water','Water vapor')+li('--p-b','Salt (ions, then crystals)'));
+  var ei=info({prop:'Volatility: water vaporizes, salt does not',
+    diff:'Heat drives the solvent off into the air and the solid is kept. The solvent is lost.',
+    use:'You want the dissolved solid and do not need the solvent: salt from sea water, solid KNO₃ from its solution, solid AgNO₃ left in water after a reaction.',
+    out:'Solid left in the dish. The water is gone. Heating hard to dryness can decompose some solids, so for those use recrystallization.'});
+  var sd=card('sd','0 0 560 340','Simple distillation: salt water boils, vapor cools in a condenser and pure water drips into a beaker while salt stays in the flask',svgSD,
+    li('--p-b','Salt (non-volatile)')+li('--p-water','Water vapor and distillate'));
+  var si=info({prop:'Boiling point: the solvent boils, the solute does not',
+    diff:'Like evaporation, but the vapor is cooled in a condenser and collected, so you keep the solvent too.',
+    use:'You want the pure solvent, or both parts: drinking water from sea water (desalination plants return the salt to the sea).',
+    out:'Pure water in the receiving flask. Salt stays in the distilling flask.',
+    key:'Why it works: water has a low boiling point because of hydrogen bonds. The ionic solid has very strong attractions, so it is non-volatile.'});
+  return block('Evaporation','Getting a dissolved solid back by boiling the solvent away.',ev,ei)+
+  block('Simple distillation','Collecting the solvent as well.',sd,si)+nextBtn('fractional','Next: fractional distillation');
+}
+
+function panelFrac(){
+  var fd=card('fd','0 0 560 400','Fractional distillation: two liquids boil, the more volatile one rises up the column and is collected first while the other falls back',svgFD,
+    li('--p-a','Liquid A: weaker IMFs, rises to the top, collected first')+li('--p-b','Liquid B: stronger IMFs, falls back down'));
+  var fi=info({prop:'Boiling point (set by the strength of IMFs)',
+    diff:'Separates liquids that mix completely. A tall column makes the vapor evaporate and condense again and again, so the most volatile liquid reaches the condenser first and the others follow over time.',
+    use:'Two or more miscible liquids with different boiling points: diethyl ether (34.6 °C), acetone (56 °C) and ethanol (78.4 °C); or heptane (C₇H₁₆) and octane (C₈H₁₈).',
+    out:'Fractions collected one after another in order of increasing boiling point. Weaker IMFs come out first, stronger IMFs last.',
+    key:'Boiling point increases with IMF strength. Vapor pressure goes the other way: weaker IMFs, higher vapor pressure, evaporates first.'});
+  var cmp='<div class="block"><div class="block-head"><h2>Simple or fractional?</h2></div><div class="cards">'+
+   '<div class="card"><h3>Simple distillation</h3><p>One liquid and a solid that will not evaporate. Large difference in volatility, so no column is needed.</p></div>'+
+   '<div class="card"><h3>Fractional distillation</h3><p>Two or more liquids with boiling points that are not far apart. The column does the repeated separating.</p></div>'+
+   '<div class="card"><h3>Collection order</h3><p>Ether (34.6 °C) → acetone (56 °C) → ethanol (78.4 °C). Lowest boiling point first, because weaker IMFs mean higher vapor pressure.</p></div></div></div>';
+  return block('Fractional distillation','Separating liquids that mix.',fd,fi)+cmp+nextBtn('extraction','Next: solvent extraction');
+}
+
+
+var svgSL=
+ '<defs><clipPath id="sl-ca"><rect x="70" y="120" width="110" height="220" rx="32"/></clipPath><clipPath id="sl-cb"><rect x="350" y="120" width="110" height="220" rx="32"/></clipPath><clipPath id="sl-cbk"><path d="M215,190 L215,335 Q215,340 220,340 L340,340 Q345,340 345,335 L345,190 Z"/></clipPath></defs>'+
+ '<g id="sl-vs">'+
+ '<path class="tube-out" d="M125,120 L125,80 L405,80 L405,120" style="stroke-width:16"/><path class="tube-in" d="M125,120 L125,80 L405,80 L405,120" style="stroke-width:10"/>'+
+ '<path class="tube-out" d="M405,340 L405,385 L125,385 L125,340" style="stroke-width:16"/><path class="tube-in" d="M405,340 L405,385 L125,385 L125,340" style="stroke-width:10"/>'+
+ '<rect x="70" y="140" width="110" height="200" fill="var(--wet)" clip-path="url(#sl-ca)"/>'+
+ '<rect x="350" y="140" width="110" height="115" fill="var(--wet)" clip-path="url(#sl-cb)"/><rect x="350" y="255" width="110" height="85" class="aq" clip-path="url(#sl-cb)"/>'+
+ '<line x1="350" x2="460" y1="255" y2="255" style="stroke:var(--p-water)" stroke-width="1.5" stroke-dasharray="4 3"/>'+
+ '<rect class="glass" x="70" y="120" width="110" height="220" rx="32"/><rect class="glass" x="350" y="120" width="110" height="220" rx="32"/>'+
+ '<text class="lbl" x="125" y="112" text-anchor="middle">Extractor</text><text class="lbl" x="405" y="112" text-anchor="middle">Wash vessel</text>'+
+ '<text class="lbl sm" x="405" y="168" text-anchor="middle">CO₂ + caffeine</text><text class="lbl sm" x="405" y="335" text-anchor="middle">water</text>'+
+ '<text class="lbl sm" x="265" y="68" text-anchor="middle">CO₂ carries the caffeine</text><text class="lbl sm" x="195" y="408" text-anchor="middle">clean CO₂ returns</text>'+
+ '<g transform="translate(265 385)"><circle r="16" class="glass" style="fill:var(--surface)"/><g id="sl-blade"><path d="M-10,0 L10,0 M0,-10 L0,10" style="stroke:var(--glass)" stroke-width="3" stroke-linecap="round"/></g></g><text class="lbl sm" x="320" y="408" text-anchor="middle">pump</text>'+
+ '</g>'+
+ '<g id="sl-bk"><rect x="216" y="228" width="128" height="112" class="aq" clip-path="url(#sl-cbk)"/><path class="glass" d="M215,190 L215,335 Q215,340 220,340 L340,340 Q345,340 345,335 L345,190"/><text class="lbl" x="280" y="176" text-anchor="middle">Pre-soak in water</text></g>'+
+ '<g id="sl-gg"><rect x="70" y="14" width="130" height="44" rx="8" style="fill:var(--surface);stroke:var(--orange)" stroke-width="2"/><text class="lbl sm" x="82" y="32">Temp.</text><text id="sl-tv" class="lbl" x="82" y="50" style="fill:var(--kt-ink)">20 °C</text>'+
+ '<rect x="220" y="14" width="150" height="44" rx="8" style="fill:var(--surface);stroke:var(--teal)" stroke-width="2"/><text class="lbl sm" x="232" y="32">Pressure</text><text id="sl-pv" class="lbl" x="232" y="50" style="fill:var(--kp-ink)">1 atm</text></g>'+
+ '<g id="sl-fx"></g>';
+
+function panelSL(){
+  var sl=card('sl','0 0 560 420','Solid-liquid extraction, decaffeinating coffee: green beans are pre-soaked in water, then supercritical CO2 at 65 degrees Celsius and 300 atmospheres flows through them and dissolves the caffeine, the caffeine-laden CO2 passes through water which takes the caffeine, and the clean CO2 is pumped back to the beans for repeated cycles',svgSL,
+    li('--bean','Green coffee bean')+li('--dye-y','Caffeine')+li('--glass','CO₂ bubbles')+li('--p-water','Water'),
+    {top:'<p class="phase" id="sl-phase">Step 1 · Pre-soak</p>',
+     after:'<div class="panelctl"><h4>Caffeine tracker (illustrative)</h4><div class="exbar" id="sl-bar"><div class="s1"></div><div class="s2"></div></div><p class="readout" id="sl-out"></p></div>'});
+  var si=info({prop:'Solubility: caffeine dissolves in the solvent, the bean does not',
+    diff:'The mixture is a solid, not a solution. The solvent soaks or flows through the solid and dissolves only the substance you want. In liquid–liquid extraction both phases are liquids, so you separate layers instead.',
+    use:'The substance is trapped inside a solid: caffeine in coffee beans or tea leaves, oil in seeds, flavor from herbs. Supercritical CO₂ suits decaf because it slips into the bean like a gas, dissolves caffeine like a liquid, and leaves most flavor compounds behind.',
+    out:'Two products: decaffeinated beans (commonly defined as at least 97% of the caffeine removed) and a caffeine solution in water. The CO₂ is cleaned and reused, so no solvent residue stays in the coffee.',
+    key:'Why soak first? Moist, soft beans release their caffeine to the flowing CO₂. Why 65 °C and 300 atm? Above 31 °C and about 73 atm, CO₂ becomes a supercritical fluid: between a gas and a liquid.'});
+  var cards='<div class="block"><div class="block-head"><h2>Coffee, tea and other solvents</h2></div><div class="cards">'+
+   '<div class="card"><h3>Coffee versus tea</h3><p>Green coffee beans hold roughly 1 to 2% caffeine by mass and tea leaves roughly 2 to 4% (values vary). Tea can be decaffeinated with the same CO₂ method.</p></div>'+
+   '<div class="card"><h3>Other solvents</h3><p>Hot water (with a carbon filter to catch the caffeine), ethyl acetate, and dichloromethane in older processes. CO₂ is popular because it is non-toxic and easy to remove.</p></div>'+
+   '<div class="card"><h3>In the school lab</h3><p>Tea bags are steeped in hot water (solid–liquid extraction). The tea is then shaken with dichloromethane in a separating funnel, and caffeine moves into the lower dichloromethane layer (liquid–liquid extraction).</p></div>'+
+   '<div class="card"><h3>What is supercritical?</h3><p>Past its critical point (31 °C, about 73 atm) CO₂ has no separate liquid and gas. It flows like a gas and dissolves like a liquid. Lower the pressure and it becomes a gas again, leaving the extract behind.</p></div></div></div>';
+  return block('Solid–liquid extraction: decaffeinating coffee and tea','The sample is a solid. The solvent flows through it and carries the wanted substance away.',sl,si)+cards;
+}
+function panelExt(){
+  var ex=card('ex','0 0 520 445','Solvent extraction in three rounds: ether is added to a water solution in a separating funnel, shaken, the layers settle with some solute in the ether, the water layer is drained into a small flask, the ether is collected, and the water goes back for another round with fresh ether',svgEX,
+    li('--p-b','Dissolved substance being extracted')+li('--dye-y','Fresh ether (less polar)')+li('--p-water','Water layer (polar)'),
+    {top:'<p class="phase" id="ex-phase">Round 1 · Add fresh ether</p>',
+     after:'<div class="panelctl"><h4>Extraction rounds</h4><div class="crow"><span class="crl">Jump to</span><div class="crv"><span class="segs" role="group" aria-label="Jump to round"><button class="btn seg" data-exr="1" aria-pressed="true">Round 1</button><button class="btn seg" data-exr="2" aria-pressed="false">Round 2</button><button class="btn seg" data-exr="3" aria-pressed="false">Round 3</button></span></div></div><div class="exbar" id="ex-bar"><div class="s1"></div><div class="s2"></div><div class="s3"></div><div class="left"></div></div><p class="readout" id="ex-out"></p></div>'});
+  var ei=info({prop:'Solubility in two liquids that do not mix',
+    diff:'Moves a dissolved substance from one solvent into another that does not mix with it. The substance goes where the IMFs are most similar to its own.',
+    use:'A substance dissolves much better in a second solvent: a non-polar compound in water pulled into ether or hexane, caffeine in tea pulled into dichloromethane.',
+    out:'Two layers. The substance ends up mainly in the better solvent (here 58% in ether, 42% in water per extraction). Each round leaves less solute in the water. Three extractions recover 0.46 g of 0.50 g = 92%.',
+    key:'Several small extractions with fresh solvent recover more than one. After extracting, evaporate or distil the solvent to get the substance itself.'});
+  var steps='<div class="block"><div class="block-head"><h2>How to run it</h2></div><ol class="steps"><li>Pour the solution and the second solvent into the separating funnel. They form two layers.</li><li>Stopper, shake, and release the pressure through the tap. The substance partitions between the layers.</li><li>Let the layers settle. The denser liquid is at the bottom.</li><li>Run the bottom layer out through the tap into a small flask. Pour the top layer out from the top into the collecting beaker.</li><li>Return the water layer to the funnel and repeat with fresh ether. Each round removes about 58% of what is left.</li></ol></div>';
+  return block('Solvent extraction','Using two liquids that do not mix.',ex,ei)+steps+panelSL()+nextBtn('column','Next: column chromatography');
+}
+
+function panelCol(){
+  var cm=card('cl','0 0 520 400','Model scheme of column chromatography: a mixed band of yellow and blue pigments moves down a silica column; the less polar yellow band exits first and is collected, then the blue',svgCL,
+    li('--dye-y','Yellow pigment: less polar, lower affinity for silica, moves faster')+li('--dye-b','Blue pigment: more polar, higher affinity for silica, held back'));
+  var cr=card('cr','0 0 560 400','Real scheme of column chromatography: colorless compounds leave the column in six fractions, each fraction is spotted on a TLC plate beside references, the plate is developed and visualized to show which fractions hold which compound',svgCR,
+    li('--p-a','Compound A: less polar, higher Rf')+li('--p-b','Compound B: more polar, lower Rf')+li('--muted','Colorless until visualized'),
+    {top:'<p class="phase" id="cr-phase">Collect colorless fractions</p>',after:'<p class="readout" id="cr-note" style="margin-top:12px">Watch the four stages. Spots stay faint until the plate is visualized.</p>'});
+  var left='<div>'+
+   '<div class="crow" style="margin-bottom:12px"><span class="crl">Scheme</span><div class="crv"><span class="segs" role="group" aria-label="Scheme"><button class="btn seg" data-scheme="model" aria-pressed="true">Model scheme</button><button class="btn seg" data-scheme="real" aria-pressed="false">Real scheme</button></span></div></div>'+
+   '<div id="cl-model">'+cm+'</div><div id="cl-real" hidden>'+cr+'</div></div>';
+  var ci=info({prop:'Affinity: attraction to the packing versus the solvent',
+    why:'Affinity means how strongly a compound is attracted to something through intermolecular forces. Every compound is pulled by the stationary phase (polar silica) and by the mobile phase (the solvent). A polar compound has a high affinity for polar silica (dipole attractions, hydrogen bonds), so it sticks and moves slowly. A less polar compound has less affinity for silica and more for the solvent, so it travels faster and comes out first.',
+    diff:'Same principle as paper and TLC, but built to collect. The mixture is washed down a tube of packing (the stationary phase) by solvent (the mobile phase), and each component drips out of the bottom separately.',
+    use:'You need a substantial sample of each part, such as the blue and yellow pigments in green food coloring. Filtration cannot remove dissolved pigments, distillation separates liquids, and paper or TLC only handles tiny samples.',
+    out:'Fractions come out one after another. On a polar column the less polar component elutes first and the more polar one is held longer. Slower than TLC.',
+    extra:'<div class="icard" id="cl-sch-model"><h4>Model scheme</h4><p>Colored bands make the idea easy to see. It shows the principle only.</p></div>'+
+      '<div class="icard" id="cl-sch-real" hidden><h4>Real scheme</h4><p>Most compounds are colorless, so you cannot see the bands. Collect the liquid in many small fractions (tubes F1, F2, F3...). Spot a drop of each fraction on a TLC or paper chromatography plate, next to reference compounds A and B. After developing and visualizing (UV lamp or stain), the spots show which fractions hold which compound. A fraction with two spots is a mixture. Combine fractions that show only one compound.</p></div>',
+    key:'Stronger attraction to the stationary phase means a slower trip down the column.'});
+  var gc=card('gc','0 0 520 240','Gas chromatography: a carrier gas pushes vaporized sample through a column in an oven; three components reach the detector at different times and give three peaks',svgGC,
+    li('--p-a','A: lightest, first')+li('--p-b','B')+li('--p-c','C: heaviest, last')+li('--glass','Carrier gas'));
+  var gi=info({prop:'Mass and volatility, using a gas as the mobile phase',
+    why:'Mass. The carrier gas is inert and does not compete for the compounds, so what matters is how long each compound lingers on the column. For similar non-polar compounds, a larger molar mass means stronger London dispersion forces and a higher boiling point, so heavier molecules stick to the column longer and leave later. Light, volatile molecules race through first.',
+    diff:'The sample is vaporized and carried by a gas through a long coiled column in a thermostatic oven. A detector at the end records each component as it comes out.',
+    use:'The mixture can be vaporized without breaking down, and you want to identify and measure the parts: for example fuel components or essential oils.',
+    out:'A chromatogram: one peak per component. The retention time (when the peak appears) identifies it and the size of the peak shows how much there is.',
+    key:'All chromatography is the same idea: components partition between a mobile and a stationary phase and so travel at different speeds.'});
+  var aff='<div class="block"><div class="block-head"><h2>What is affinity?</h2><p class="sub">The reason column chromatography and TLC separate compounds.</p></div><div class="cards">'+
+   '<div class="card"><h3>Affinity = attraction</h3><p>How strongly a molecule is attracted to a phase through intermolecular forces. High affinity means it prefers to stay there.</p></div>'+
+   '<div class="card"><h3>Polar molecule, polar silica</h3><p>Dipole attractions and hydrogen bonds hold it on the stationary phase. It spends most of its time stuck, so it moves slowly (low Rf).</p></div>'+
+   '<div class="card"><h3>Non-polar molecule, solvent</h3><p>Only weak London dispersion forces hold it to silica. It prefers the mobile phase, so it is carried along quickly (high Rf).</p></div>'+
+   '<div class="card"><h3>Constant swapping</h3><p>Each molecule keeps moving between the two phases. The one that spends more time in the mobile phase travels further.</p></div></div></div>';
+  return block('Column chromatography','Separating and collecting dissolved compounds. Choose the model or the real scheme.',left,ci)+aff+
+    block('Gas chromatography','The mobile phase is a gas.',gc,gi)+nextBtn('tlc','Next: analyzing a TLC plate');
+}
+
+var SOLV=[['Hexane',0.1,'non-polar'],['Toluene',2.4,'weakly polar'],['Dichloromethane',3.1,'weakly polar'],['Ethanol',4.3,'polar'],['Ethyl acetate',4.4,'moderately polar'],['Acetone',5.1,'polar'],['Water',10.2,'very polar']];
+var CMP=[['β-carotene',1,'non-polar'],['Naphthalene',2,'non-polar'],['Chlorophyll a',4,'weakly polar'],['Acetophenone',5,'moderately polar'],['Caffeine',7,'polar'],['Glucose',10,'very polar']];
+var CDEF=[2,4,5];
+function tlCtl(){
+ var so=SOLV.map(function(s,i){return '<option value="'+i+'"'+(i===2?' selected':'')+'>'+s[0]+'</option>'}).join('');
+ var cr=[0,1,2].map(function(k){var c=['--dye-y','--dye-p','--dye-b'][k];
+  var op=CMP.map(function(m,j){return '<option value="'+j+'"'+(j===CDEF[k]?' selected':'')+'>'+m[0]+'</option>'}).join('');
+  return '<div class="crow"><label class="crl" for="tl-c'+k+'"><i class="sw" style="background:var('+c+')"></i>Lane '+'ABC'.charAt(k)+'</label><div class="crv"><select id="tl-c'+k+'" data-cmp="'+k+'">'+op+'</select><span class="pbar"><i id="tl-cb'+k+'"></i></span><span class="pnote" id="tl-cn'+k+'"></span></div></div>'}).join('');
+ return '<div class="panelctl"><h4>Set up the experiment</h4>'+
+ '<div class="crow"><span class="crl">Plate</span><div class="crv"><span class="segs" role="group" aria-label="Stationary phase"><button class="btn seg" data-sp="polar" aria-pressed="true">Polar (silica)</button><button class="btn seg" data-sp="nonpolar" aria-pressed="false">Non-polar (C18)</button></span></div></div>'+
+ '<div class="crow"><label class="crl" for="tl-sol">Solvent</label><div class="crv"><select id="tl-sol">'+so+'</select><span class="pbar"><i id="tl-sb"></i></span><span class="pnote" id="tl-sn"></span></div></div>'+
+ cr+'<p class="pnote" style="margin:0">Bars: compounds are rated 1 (non-polar) to 10 (very polar); solvents use the polarity index.</p><p class="readout" id="tl-hint"></p></div>';
+}
+function panelTLC(){
+  var rows=['Lane A','Lane B','Lane C'].map(function(n,i){var c=['--dye-y','--dye-p','--dye-b'][i];
+    return '<tr class="row" data-sel="'+i+'" tabindex="0"><td><i class="sw" style="background:var('+c+')"></i>'+n+' <span id="tl-n'+i+'" class="pnote"></span></td><td class="mono" id="tl-d'+i+'">0.0</td><td class="mono" id="tl-r'+i+'">0.00</td></tr>'}).join('');
+  var tl=card('tl','0 -90 400 470','A TLC plate being prepared: baseline and lane labels in pencil, four samples spotted one at a time, the plate lowered into the solvent chamber, the lid closed, developed, taken out, the front marked and the spots circled',svgTL,
+    li('--teal','Solvent front')+li('--plate-ink','Pencil marks'),
+    {top:'<p class="phase" id="tl-phase">Draw the baseline in pencil and label the lanes</p>',replay:'Run again',after:tlCtl()+'<div class="ctl">'+formula()+
+    '<div class="readout">Solvent front <b>F</b> = <b id="tl-F">0.0</b> cm. Tap a row to see how <b>d</b> and <b>F</b> are measured.</div>'+
+    '<table class="rftbl"><thead><tr><th>Spot (mixture lane)</th><th>d (cm)</th><th>Rf = d ÷ F</th></tr></thead><tbody>'+rows+'</tbody></table></div>'});
+  var ti=info({prop:'Affinity: attraction to the plate versus the solvent',
+    why:'Affinity means how strongly a compound is attracted to the stationary phase or to the mobile phase through intermolecular forces. A polar compound has a high affinity for the polar silica plate, so it is held back and travels a short distance (low Rf). A non-polar compound has more affinity for the solvent, so it travels further (high Rf).',
+    diff:'The stationary phase is a thin layer of silica (SiO₂) or alumina (Al₂O₃) on plastic, glass or metal. Compared with paper (cellulose) it runs faster, gives sharper spots and lasts longer.',
+    use:'You only need to analyze a tiny sample: how many components, whether one matches a known reference, whether a reaction is finished, or which solvent to use before a column.',
+    out:'A plate with one spot per component. You read it, you do not collect from it. Use column chromatography to collect.',
+    key:'On a polar plate a polar component sticks more strongly, travels less far and has a lower Rf.'});
+  var read='<div class="block"><div class="block-head"><h2>Read a plate in five steps</h2></div>'+formula()+'<ol class="steps">'+
+   '<li><b>Count the spots</b> in the mixture lane. Each separate spot is a different component. Spots of the same color in several lanes are the same substance.</li>'+
+   '<li><b>Match references.</b> A mixture spot at the same height as a reference spot, on the same plate, is probably that substance.</li>'+
+   '<li><b>Measure d and F</b> from the baseline: d to the center of the spot, F to the solvent front you marked. Calculate Rf = d ÷ F.</li>'+
+   '<li><b>Compare Rf, not raw distances,</b> when solvent fronts differ. Example: unknown spot 56 mm ÷ 110 mm = 0.51 matches dye A (Rf ≈ 0.50).</li>'+
+   '<li><b>Read the polarity.</b> On a polar plate, lower Rf means more polar. Higher Rf means less polar and more attracted to the solvent.</li></ol></div>';
+  var chg='<div class="block"><div class="block-head"><h2>What changes Rf</h2><p class="sub">Pick a different solvent or compounds in the TLC controls above and watch each spot move.</p></div><div class="cards">'+
+   '<div class="card"><h3>More polar solvent</h3><p>It holds polar compounds in solution better, so their Rf goes up. Non-polar spots move less because they already travelled far.</p></div>'+
+   '<div class="card"><h3>Polar stationary phase</h3><p>A polar component sticks more strongly, so its Rf is lower. A non-polar component moves further.</p></div>'+
+   '<div class="card"><h3>Same conditions only</h3><p>Rf stays the same for the same compound, plate and solvent, even if the run time or front distance differs. Different plate or solvent means different Rf.</p></div></div></div>';
+  var mist='<div class="block"><div class="block-head"><h2>Common mistakes</h2></div><div class="cards">'+
+   '<div class="card"><h3>Baseline under the solvent</h3><p>Start the solvent below the spots. If the baseline is under the solvent, the sample dissolves into the pool.</p></div>'+
+   '<div class="card"><h3>Using pen</h3><p>Draw the baseline in pencil. Pen ink contains dyes that also run up the plate.</p></div>'+
+   '<div class="card"><h3>Not marking the front</h3><p>Mark the solvent front as soon as you remove the plate. If it evaporates, F is measured too small and Rf comes out too large.</p></div>'+
+   '<div class="card"><h3>Lid off</h3><p>Cover the container so the air stays full of solvent vapor and the front rises evenly.</p></div></div></div>';
+  var pt='<div class="block"><div class="block-head"><h2>Paper or TLC?</h2></div><div class="tbl-wrap"><table><thead><tr><th></th><th>Paper chromatography</th><th>Thin-layer chromatography</th></tr></thead><tbody>'+
+   '<tr><td class="m">Stationary phase</td><td>Cellulose fibres (polar surface)</td><td>Silica or alumina coating on plastic, glass or metal</td></tr>'+
+   '<tr><td class="m">Speed</td><td>Slower</td><td>Faster</td></tr>'+
+   '<tr><td class="m">Spots</td><td>Lower resolution</td><td>Sharper</td></tr>'+
+   '<tr><td class="m">Durability</td><td>Fragile</td><td>More durable</td></tr></tbody></table></div></div>';
+  return block('Analyzing a TLC plate','Prepare the plate, run it, then measure it.',tl,ti)+read+chg+mist+pt+nextBtn('practice','Next: practice');
+}
+
+/* ---------- practice: figures ---------- */
+var KCL=[[20,34],[30,37],[40,40],[50,43],[60,46],[70,48.5],[80,51],[90,54]],CE=[[20,10],[30,8],[40,6],[50,4.7],[60,3.8],[70,3.2],[80,2.8],[90,2.5]];
+var KNO3=[[20,31],[30,46],[40,64],[50,85],[60,110],[70,138],[80,169],[90,202]],NACL=[[20,36],[30,36.3],[40,36.6],[50,37],[60,37.3],[70,37.8],[80,38.4],[90,39]];
+function sol(a,T){for(var i=1;i<a.length;i++)if(T<=a[i][0]){var p=a[i-1],q=a[i];return p[1]+(q[1]-p[1])*(T-p[0])/(q[0]-p[0])}return a[a.length-1][1]}
+function svgF(w,h,aria,inner,cls){return '<svg class="fig '+(cls||'')+'" viewBox="0 0 '+w+' '+h+'" role="img" aria-label="'+aria+'">'+inner+'</svg>'}
+var SPC={y:'s-y',p:'s-p',b:'s-b',g:'s-g'};
+function plateG(x0,lanes){
+  var n=lanes.length,w=n*58+10,BY=206,TR=160,o='';
+  o+='<rect x="'+x0+'" y="30" width="'+w+'" height="196" rx="3" style="fill:var(--plate);stroke:var(--glass)" stroke-width="1.5"/>';
+  o+='<line x1="'+(x0+6)+'" x2="'+(x0+w-6)+'" y1="'+BY+'" y2="'+BY+'" style="stroke:var(--plate-ink)" stroke-width="1.2" opacity=".6"/>';
+  o+='<line x1="'+x0+'" x2="'+(x0+w)+'" y1="'+(BY-TR)+'" y2="'+(BY-TR)+'" style="stroke:var(--plate-ink)" stroke-width="1.2" stroke-dasharray="5 3"/>';
+  lanes.forEach(function(l,i){var x=x0+34+i*58;
+    l.s.forEach(function(sp){o+='<ellipse cx="'+x+'" cy="'+(BY-sp[0]*TR).toFixed(1)+'" rx="9" ry="6" class="'+SPC[sp[1]]+'"/>'});
+    o+='<text x="'+x+'" y="'+(BY+14)+'" text-anchor="middle" class="pk">'+l.n+'</text>';});
+  return {svg:o,w:w};
+}
+function plateFig(lanes,ruler,aria){
+  var x0=ruler?52:20,g=plateG(x0,lanes),o=g.svg;
+  if(ruler){
+    o+='<line x1="'+(x0-8)+'" x2="'+(x0-8)+'" y1="46" y2="206" class="axis"/><text class="lbl sm" x="6" y="22">cm</text>';
+    for(var k=0;k<=ruler;k++){var y=206-k*160/ruler;o+='<line x1="'+(x0-14)+'" x2="'+(x0-8)+'" y1="'+y.toFixed(1)+'" y2="'+y.toFixed(1)+'" class="axis"/><text class="lbl sm" x="'+(x0-17)+'" y="'+(y+4).toFixed(1)+'" text-anchor="end">'+k+'</text>'}
+  }
+  return svgF(x0+g.w+20,250,aria,o);
+}
+function twoPlateFig(){
+  var a=plateG(70,[{n:'Mix',s:[[.80,'y'],[.55,'b']]}]),b=plateG(250,[{n:'Mix',s:[[.70,'y'],[.25,'b']]}]);
+  return svgF(400,250,'Two TLC plates of the same mixture, run in solvent P (left) and solvent Q (right). In P the yellow spot is at 0.80 and the blue spot at 0.55; in Q the yellow spot is at 0.70 and the blue spot at 0.25.',
+    a.svg+b.svg+'<text class="lbl" x="104" y="22" text-anchor="middle">Solvent P</text><text class="lbl" x="284" y="22" text-anchor="middle">Solvent Q</text>');
+}
+function solFig(){
+  var X=function(t){return 50+(t-20)*300/70},Y=function(v){return 230-v*.8},o='';
+  o+='<line class="axis" x1="50" y1="230" x2="360" y2="230"/><line class="axis" x1="50" y1="230" x2="50" y2="40"/><text class="lbl sm" x="52" y="30">Solubility (g per 100 g water)</text><text class="lbl sm" x="205" y="262" text-anchor="middle">Temperature (°C)</text>';
+  [20,40,60,80].forEach(function(t){o+='<line class="axis" x1="'+X(t)+'" x2="'+X(t)+'" y1="230" y2="235"/><text class="lbl sm" x="'+X(t)+'" y="248" text-anchor="middle">'+t+'</text>'});
+  [0,50,100,150,200].forEach(function(v){o+='<line class="axis" x1="45" x2="50" y1="'+Y(v)+'" y2="'+Y(v)+'"/><text class="lbl sm" x="42" y="'+(Y(v)+4)+'" text-anchor="end">'+v+'</text>'});
+  o+='<line x1="'+X(30)+'" x2="'+X(30)+'" y1="40" y2="230" stroke="var(--muted)" stroke-dasharray="4 4"/><line x1="'+X(90)+'" x2="'+X(90)+'" y1="40" y2="230" stroke="var(--muted)" stroke-dasharray="4 4"/>';
+  [['KNO₃',KNO3,'--p-b'],['NaCl',NACL,'--p-a'],['KCl',KCL,'--p-c'],['Ce₂(SO₄)₃',CE,'--dye-b']].forEach(function(c){
+    o+='<path fill="none" stroke="var('+c[2]+')" stroke-width="3" d="'+c[1].map(function(p,i){return (i?'L':'M')+X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)}).join(' ')+'"/>';
+    o+='<text class="lbl" x="368" y="'+(Y(c[1][7][1])+4).toFixed(1)+'" style="fill:var('+c[2]+')">'+c[0]+'</text>';
+  });
+  return svgF(460,270,'Solubility curves from 20 to 90 degrees Celsius for KNO3, NaCl, KCl and Ce2(SO4)3. KNO3 rises steeply, KCl rises gently, NaCl is almost flat and Ce2(SO4)3 falls slightly. Dashed lines mark 30 and 90 degrees.',o);
+}
+function distFig(){
+  var X=function(v){return 50+v*3.4},Y=function(t){return 220-(t-60)*2},o='';
+  var bands=[['A',5,20],['B',20,44],['C',44,58],['D',58,98]];
+  bands.forEach(function(b,i){o+='<rect x="'+X(b[1])+'" y="40" width="'+(X(b[2])-X(b[1]))+'" height="180" style="fill:var(--'+(i%2?'surface2':'teal-soft')+')" opacity=".85"/><text class="lbl" x="'+((X(b[1])+X(b[2]))/2)+'" y="56" text-anchor="middle">'+b[0]+'</text>'});
+  o+='<line class="axis" x1="50" y1="220" x2="395" y2="220"/><line class="axis" x1="50" y1="220" x2="50" y2="40"/><text class="lbl sm" x="52" y="30">Temperature at top of column (°C)</text><text class="lbl sm" x="222" y="252" text-anchor="middle">Volume of distillate collected (mL)</text>';
+  [0,20,40,60,80,100].forEach(function(v){o+='<line class="axis" x1="'+X(v)+'" x2="'+X(v)+'" y1="220" y2="225"/><text class="lbl sm" x="'+X(v)+'" y="238" text-anchor="middle">'+v+'</text>'});
+  [60,80,100,120,140].forEach(function(t){o+='<line class="axis" x1="45" x2="50" y1="'+Y(t)+'" y2="'+Y(t)+'"/><text class="lbl sm" x="42" y="'+(Y(t)+4)+'" text-anchor="end">'+t+'</text>'});
+  var pts=[[0,70],[3,92],[6,98],[25,99.5],[43,101],[48,108],[53,119],[57,124.5],[80,126],[100,127.5]];
+  o+='<path fill="none" stroke="var(--ink)" stroke-width="3" d="'+pts.map(function(p,i){return (i?'L':'M')+X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)}).join(' ')+'"/>';
+  return svgF(420,262,'Graph of temperature against volume of distillate for a heptane and octane mixture. The temperature is steady near 98 degrees for the first part, rises quickly through range C, then is steady near 126 degrees. Ranges A, B, C and D are shaded along the volume axis.',o);
+}
+function colFig(){
+  return svgF(300,280,'A column of polar silica part way through a separation: a yellow band near the bottom and a blue band higher up.',
+   '<defs><pattern id="qf-pat" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="2.5" cy="2.5" r="1.5" style="fill:var(--packing)"/><circle cx="7" cy="7" r="1.5" style="fill:var(--packing)"/></pattern></defs>'+
+   '<rect x="90" y="40" width="60" height="190" fill="url(#qf-pat)"/><rect x="91" y="170" width="58" height="22" style="fill:var(--dye-y)" opacity=".9"/><rect x="91" y="110" width="58" height="22" style="fill:var(--dye-b)" opacity=".65"/>'+
+   '<path class="glass" d="M90,20 L90,232 L112,252 L112,266 L128,266 L128,252 L150,232 L150,20"/>'+
+   '<text class="lbl" x="164" y="186">Yellow band</text><text class="lbl" x="164" y="126">Blue band</text><text class="lbl sm" x="164" y="70">polar silica packing</text>','sm');
+}
+function gcFig(){
+  var X=function(t){return 50+t*30},o='';
+  o+='<line class="axis" x1="50" y1="200" x2="420" y2="200"/><line class="axis" x1="50" y1="200" x2="50" y2="40"/><text class="lbl sm" x="235" y="236" text-anchor="middle">Retention time (min)</text><text class="lbl sm" x="52" y="30">Detector signal</text>';
+  for(var t=0;t<=12;t+=2)o+='<line class="axis" x1="'+X(t)+'" x2="'+X(t)+'" y1="200" y2="205"/><text class="lbl sm" x="'+X(t)+'" y="218" text-anchor="middle">'+t+'</text>';
+  var P=[[3,70,8,'1'],[6,115,11,'2'],[10,85,15,'3']],d='';
+  for(var x=50;x<=420;x+=2){var y=200;P.forEach(function(p){y-=p[1]*Math.exp(-Math.pow(x-X(p[0]),2)/(2*p[2]*p[2]))});d+=(x===50?'M':'L')+x+','+y.toFixed(1)}
+  o+='<path fill="none" stroke="var(--ink)" stroke-width="2.5" d="'+d+'"/>';
+  P.forEach(function(p){o+='<text class="lbl" x="'+X(p[0])+'" y="'+(200-p[1]-8)+'" text-anchor="middle">Peak '+p[3]+'</text>'});
+  return svgF(440,246,'Gas chromatogram with three peaks at about 3, 6 and 10 minutes, labelled Peak 1, Peak 2 and Peak 3.',o);
+}
+function appFig(kind){
+  var o='',aria='';
+  if(kind==='filter'){
+    aria='A funnel lined with filter paper holding brown solid, above a flask.';
+    o='<polygon class="paper" points="56,56 100,106 144,56"/><polygon class="glass" points="46,50 154,50 108,112 92,112"/><rect class="glass" x="92" y="112" width="16" height="24"/><polygon class="glass" points="90,136 90,148 58,184 142,184 110,148 110,136"/>'+
+      [[78,92],[92,98],[108,98],[122,92],[100,90]].map(function(p){return '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="4" class="c-solid"/>'}).join('')+'<rect class="liq" x="64" y="170" width="72" height="12"/>';
+  }else if(kind==='sep'){
+    var b='M92,24 L108,24 C150,50 152,100 125,130 L110,150 L110,168 L90,168 L90,150 L75,130 C48,100 50,50 92,24 Z';
+    aria='A pear-shaped glass funnel with a stopper and a tap, holding two liquid layers.';
+    o='<defs><clipPath id="af-sc"><path d="'+b+'"/></clipPath></defs><rect x="40" y="40" width="120" height="62" class="ether" clip-path="url(#af-sc)"/><rect x="40" y="102" width="120" height="70" class="aq" clip-path="url(#af-sc)"/><path class="glass" d="'+b+'"/><rect class="glass" x="93" y="12" width="14" height="12" rx="2"/><path class="glass" d="M80,160 L120,160"/>';
+  }else if(kind==='frac'){
+    aria='A flask with a tall column packed with beads, a side arm leading to a condenser and a collecting beaker.';
+    o='<defs><pattern id="af-bd" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r="2.8" fill="none" style="stroke:var(--glass)" stroke-width="1"/></pattern></defs><path class="jacket" d="M98,44 L150,68" style="stroke-width:20"/><rect x="36" y="40" width="28" height="82" fill="url(#af-bd)"/><path class="glass" d="M36,40 L36,122 M64,40 L64,122"/><circle class="glass" cx="50" cy="150" r="30"/>'+
+      '<path class="tube-out" d="M50,40 L50,34 L84,34 L168,72" style="stroke-width:10"/><path class="tube-in" d="M50,40 L50,34 L84,34 L168,72" style="stroke-width:6"/><path class="glass" d="M150,132 L150,182 L190,182 L190,132"/>';
+  }else{
+    aria='A beaker with a lid containing an upright coated plate standing in a shallow layer of solvent.';
+    o='<path class="glass" d="M30,40 L30,180 Q30,186 36,186 L164,186 Q170,186 170,180 L170,40"/><rect x="70" y="50" width="60" height="125" rx="3" style="fill:var(--plate);stroke:var(--glass)" stroke-width="1.5"/><line x1="76" x2="124" y1="140" y2="140" style="stroke:var(--plate-ink)" stroke-width="1.2" opacity=".6"/>'+
+      '<ellipse cx="85" cy="104" rx="7" ry="5" class="s-y"/><ellipse cx="100" cy="124" rx="7" ry="5" class="s-p"/><ellipse cx="115" cy="86" rx="7" ry="5" class="s-b"/><rect class="liq" x="31" y="160" width="138" height="25"/><rect x="24" y="30" width="152" height="9" rx="4" style="fill:var(--surface);stroke:var(--glass)" stroke-width="2.5"/>';
+  }
+  return svgF(200,200,aria,o,'sm');
+}
+
+var METHODS=['Filtration','Recrystallization','Evaporation','Simple distillation','Fractional distillation','Solvent extraction','Column chromatography','Paper / TLC','Solid–liquid extraction'];
+var PQ=[
+ {g:'m',q:'Yellow lead(II) iodide forms when KI(aq) is mixed with Pb(NO₃)₂(aq). You want to collect the yellow solid.',a:0,why:'PbI₂ is an undissolved solid in a liquid. Its particles are too big to pass through filter paper, while the dissolved ions pass through.'},
+ {g:'m',q:'You want all of the solid KNO₃ back from a KNO₃(aq) solution. The water is not needed.',a:2,why:'Boil the water away and the non-volatile solid is left. Recrystallization would leave some KNO₃ dissolved, so it cannot recover all of it.'},
+ {g:'m',q:'You want drinking water from sea water.',a:3,why:'Water has a low boiling point while the ionic salts are non-volatile. The vapor is cooled in a condenser and collected as pure water. Simple evaporation would lose the water.'},
+ {g:'m',q:'A hot saturated KNO₃ solution at 90 °C contains a little soluble impurity. You want pure KNO₃ crystals.',a:1,why:'KNO₃ solubility falls steeply on cooling (about 202 to 46 g per 100 g water), so crystals form while the small amount of impurity stays dissolved. Then filter.'},
+ {g:'m',q:'Diethyl ether (34.6 °C), acetone (56 °C) and ethanol (78.4 °C) are mixed. Separate them.',a:4,why:'They are miscible liquids with different boiling points. Weaker IMFs give higher vapor pressure, so ether is collected first, then acetone, then ethanol.'},
+ {g:'m',q:'Caffeine is dissolved in hot tea (mostly water). It dissolves much better in dichloromethane, which does not mix with water. Pull the caffeine out.',a:5,why:'Two liquids that do not mix, and a solute that prefers one. Shake in a separating funnel, let the layers settle and run one off. Caffeine moves into the solvent whose IMFs are most like its own.'},
+ {g:'m',q:'Green food coloring is a blue pigment and a yellow pigment dissolved in water and ethanol. You want a large sample of each pigment.',a:6,why:'Filtration cannot remove dissolved pigments, distillation separates the liquids, and paper or TLC only analyze tiny samples. In a column each band is washed out and collected.'},
+ {g:'m',q:'A forensic lab has one tiny drop of ink. It must find out how many dyes the ink contains and compare them with known dyes.',a:7,why:'Only a tiny sample is needed and nothing has to be collected. Run it beside reference dyes and compare spots and Rf values.'},
+ {g:'m',q:'A chemist is about to run a large column. First she wants a fast, small test to find which solvent separates her sample.',a:7,why:'TLC is quick and uses a tiny amount, so it is ideal for testing solvents and checking results before scaling up to a column.'},
+ {g:'m',q:'Heptane (C₇H₁₆) and octane (C₈H₁₈) are mixed. You want to collect the octane, which has the stronger intermolecular forces.',a:4,why:'Both are non-polar liquids that mix. Octane has stronger London dispersion forces and a higher boiling point, so heptane distils first and octane is collected last.'},
+ {g:'m',q:'3 Ag(s) + 4 HNO₃(aq) → 3 AgNO₃(aq) + NO(g) + 2 H₂O(l). Isolate solid AgNO₃ from the other products.',a:2,why:'NO escapes as a gas and AgNO₃ is dissolved in water, so filtration will not work. Evaporate the water to leave solid AgNO₃.'},
+ {g:'m',q:'Acetone (56 °C) and water (100 °C) are mixed. You want to separate them.',a:4,why:'Both liquids mix and their boiling points differ. Acetone has weaker IMFs than water, so a higher vapor pressure, and it distils first through the column.'},
+ {g:'m',q:'Sugar is dissolved in water. You want the pure water back.',a:3,why:'Sugar is non-volatile. The water boils off, condenses in the condenser and is collected, while the sugar stays in the flask.'},
+ {g:'m',q:'Spinach leaves are crushed in ethanol to make a green extract. You want to know how many different pigments it contains, using one drop.',a:7,why:'A tiny sample that only needs analyzing: spot it on paper or a TLC plate, develop it, and count the spots.'},
+
+ {g:'f',q:'Which separation method uses the apparatus in the figure?',fig:function(){return appFig('filter')},a:0,why:'A funnel with filter paper holds back undissolved solid (the residue) and lets the liquid (the filtrate) through.'},
+ {g:'f',q:'Which separation method uses the apparatus in the figure?',fig:function(){return appFig('sep')},a:5,why:'A separating funnel holds two liquids that do not mix. The layers are run off through the tap.'},
+ {g:'f',q:'Which separation method uses the apparatus in the figure?',fig:function(){return appFig('frac')},a:4,why:'The tall packed column gives repeated evaporation and condensation, separating liquids with different boiling points.'},
+ {g:'f',q:'Which separation method uses the apparatus in the figure?',fig:function(){return appFig('tlc')},a:7,why:'A plate standing in a little solvent in a covered container is thin-layer chromatography. The solvent must be below the pencil baseline.'},
+ {g:'f',q:'A TLC plate was run in the same solvent. Which reference substances are present in the mixture?',fig:function(){return plateFig([{n:'Mix',s:[[.72,'y'],[.48,'p']]},{n:'Ref 1',s:[[.72,'y']]},{n:'Ref 2',s:[[.24,'b']]},{n:'Ref 3',s:[[.48,'p']]}],0,'A TLC plate with four lanes. The mixture lane has spots at 0.72 (yellow) and 0.48 (pink). Reference 1 has a yellow spot at 0.72, reference 2 a blue spot at 0.24 and reference 3 a pink spot at 0.48.')},o:['1 and 2','1 and 3','2 and 3','1, 2 and 3'],a:1,why:'The mixture spots are at the same heights as references 1 and 3. Nothing in the mixture lane matches reference 2.'},
+ {g:'f',q:'Read the ruler on the plate figure. The spot is at 4.5 cm and the solvent front at 6.0 cm. What is the Rf?',fig:function(){return plateFig([{n:'Dye X',s:[[.75,'p']]}],6,'A TLC plate with a cm ruler from 0 to 6. The solvent front is at 6 cm and the pink spot is at 4.5 cm.')},o:['0.75','0.60','1.33','0.25'],a:0,why:'Rf = d ÷ F = 4.5 ÷ 6.0 = 0.75. Rf is distance moved by the spot divided by distance moved by the front, so it must be below 1.'},
+ {g:'f',q:'The same mixture was run on the same type of silica plate with two different solvents. Which solvent is more polar?',fig:function(){return twoPlateFig()},o:['Solvent P','Solvent Q','Cannot tell'],a:0,why:'In P the blue (more polar) spot moves much higher (Rf 0.55 against 0.25). A more polar solvent competes better for polar compounds and raises their Rf.'},
+ {g:'f',q:'A column of polar silica is part way through a separation. Which statement is correct?',fig:function(){return colFig()},o:['Blue is more polar; yellow is collected first','Yellow is more polar; blue is collected first','Blue is more polar; blue is collected first','Yellow is more polar; yellow is collected first'],a:0,why:'The blue band has moved less, so it has the higher affinity for polar silica and is more polar. The yellow band is ahead and reaches the bottom first.'},
+ {g:'f',q:'Which compound gives the greatest percentage recovered when a saturated solution is cooled from 90 °C to 30 °C?',fig:function(){return solFig()},o:['KNO₃','NaCl','KCl','Ce₂(SO₄)₃'],a:0,why:'KNO₃ has the steepest curve: about 202 down to 46 g per 100 g water, roughly 77% recovered. NaCl is nearly flat (about 7%) and KCl rises gently (about 31%). Ce₂(SO₄)₃ is less soluble when hot, so cooling does not make it crystallize.'},
+ {g:'f',q:'In which volume range should you collect the octane, the compound with the stronger intermolecular forces?',fig:function(){return distFig()},o:['Range A','Range B','Range C','Range D'],a:3,why:'Heptane has weaker IMFs and distils first (about 98 °C). Octane distils later at about 126 °C, so it is collected in range D.'},
+ {g:'f',q:'Which range contains a mixture of heptane and octane?',fig:function(){return distFig()},o:['Range A','Range B','Range C','Range D'],a:2,why:'Range C is where the temperature is rising between the two steady plateaus, so both liquids are distilling. Collect that part separately.'},
+ {g:'f',q:'Hexane, heptane and octane are run on a non-polar GC column. Which peak is octane?',fig:function(){return gcFig()},o:['Peak 1','Peak 2','Peak 3'],a:2,why:'Octane has the largest molar mass, so the strongest London dispersion forces and the highest boiling point. It spends the longest on the column and appears last.'},
+
+ {g:'r',q:'In a TLC run the solvent front moves 110 mm and an unknown spot moves 56 mm. What is the Rf of the spot?',o:['0.31','0.51','0.75','1.96'],a:1,why:'Rf = 56 ÷ 110 = 0.51. It matches dye A (Rf ≈ 0.50). Compare Rf values, not raw distances.'},
+ {g:'r',q:'Three dyes run in a non-polar solvent on polar paper: A has Rf 0.50, B 0.27, C 0.75. Which dye is least polar?',o:['Dye A','Dye B','Dye C'],a:2,why:'Dye C travelled furthest: weakest attraction to the polar paper and most soluble in the non-polar solvent.'},
+ {g:'r',q:'The run is repeated with a more polar solvent. What happens to the Rf of a polar dye?',o:['It increases','It decreases','It stays the same','It becomes negative'],a:0,why:'A more polar solvent competes better for polar dyes, so they spend more time dissolved in the mobile phase and travel further.'},
+ {g:'r',q:'A dye has Rf = 0.80 when the solvent front travels 10.0 cm. In another run the front travels 6.0 cm. How far does the dye travel?',o:['3.0 cm','4.8 cm','6.0 cm','8.0 cm'],a:1,why:'Rf is a ratio and stays the same under the same conditions: 0.80 × 6.0 cm = 4.8 cm.'},
+ {g:'r',q:'A student draws the baseline in pen and sets it below the solvent level. What goes wrong?',o:['The spots dissolve into the solvent pool and the ink dyes run too','Nothing, because Rf only depends on the dye','Every Rf becomes 1.0','The plate runs faster and gives sharper spots'],a:0,why:'The baseline must be in pencil and above the solvent. Otherwise the sample washes away and ink dyes add extra spots.'},
+ {g:'r',q:'Iodine (I₂, non-polar) is dissolved in water. Hexane is added, shaken and left to settle. Where does most of the iodine end up?',o:['In the hexane layer, because I₂ and hexane both rely on London dispersion forces','In the water layer, because water is a better solvent','Equally in both layers','Stuck to the glass'],a:0,why:'Like dissolves like. Non-polar I₂ has IMFs similar to hexane, and water holds its molecules together with strong hydrogen bonds that I₂ cannot replace.'},
+ {g:'r',q:'X and Y are separated on moderately polar paper and Y travels further than X. What can you conclude?',o:['X is more polar than Y','Y is more polar than X','X has the larger molar mass','Y has the larger molar mass'],a:0,why:'X is held back more by the polar paper, so X is more polar. Molar mass cannot be read from the plate.'},
+ {g:'r',q:'Why does gas chromatography separate hexane, heptane and octane?',o:['Heavier molecules have stronger dispersion forces and stay on the column longer','The carrier gas is attracted more to the lighter molecules','Octane is more polar than hexane','They differ in color'],a:0,why:'The carrier gas is inert, so separation depends on how long each compound lingers on the column. More mass means stronger London dispersion forces and a later peak.'},
+ {g:'r',q:'In column chromatography, what does a high affinity for the stationary phase do to a compound?',o:['It moves slowly and elutes later','It moves quickly and elutes first','It dissolves in the packing','It has no effect on speed'],a:0,why:'Affinity is attraction. A compound strongly attracted to the packing is held back, so it takes longer to come off the column.'},
+ {g:'m',q:'Green coffee beans must lose their caffeine with no solvent residue. The soaked beans are flushed with supercritical CO₂ at 65 °C and 300 atm, and the CO₂ is then washed with water.',a:8,why:'The caffeine is trapped inside a solid, so a solvent has to flow through the beans and dissolve it. That is solid–liquid extraction. The caffeine then moves into water and the CO₂ is reused.'},
+ {g:'r',q:'Why are green coffee beans soaked in water before the CO₂ extraction?',o:['Water swells and softens the beans, freeing the caffeine so the CO₂ can reach it','Water dissolves all the flavor compounds','Water turns the CO₂ into a solid','Water raises the temperature to 65 °C'],a:0,why:'Dry beans hold their caffeine tightly. Moist, softened beans release it into the flowing CO₂.'},
+ {g:'r',q:'In the CO₂ decaf process, what does the water in the second vessel do?',o:['It takes the caffeine out of the CO₂ so the CO₂ can be reused','It heats the CO₂ to 65 °C','It moistens the beans','It filters the beans'],a:0,why:'Caffeine dissolves better in water than in CO₂ at this stage, so it moves into the water. The cleaned CO₂ is pumped back to the beans.'}
+];
+
+function panelPractice(){
+  return '<div class="scorebar"><span id="score"></span><button class="btn" id="p-reset">Start again</button></div>'+
+  '<div class="pgroup" id="pg-m"><div class="block-head"><h2>Choose the method</h2><p class="sub">Pick the best method for each case, then read the reason.</p></div></div>'+
+  '<div class="pgroup" id="pg-f"><div class="block-head"><h2>Read the figure</h2><p class="sub">Use the picture or graph to answer.</p></div></div>'+
+  '<div class="pgroup" id="pg-r"><div class="block-head"><h2>Concepts and calculations</h2><p class="sub">Chromatography and extraction questions.</p></div></div>';
+}
+var pState=[];
+function renderPractice(){
+  pState=PQ.map(function(){return -1});
+  $$('.q').forEach(function(n){n.remove()});
+  var cnt={m:0,f:0,r:0};
+  PQ.forEach(function(q,i){
+    var opts=(q.o||METHODS).map(function(o,k){return '<button class="opt" data-q="'+i+'" data-o="'+k+'">'+o+'</button>'}).join('');
+    var n=++cnt[q.g];
+    var el=document.createElement('article');el.className='q';el.id='q'+i;
+    el.innerHTML='<p class="qn">Question '+n+'</p><p class="qtext">'+q.q+'</p>'+(q.fig?'<div class="figwrap">'+q.fig()+'</div>':'')+'<div class="opts">'+opts+'</div><div class="fb"></div>';
+    $('#pg-'+q.g).appendChild(el);
+  });
+  updScore();
+}
+function updScore(){
+  var a=0,c=0;pState.forEach(function(v,i){if(v>=0){a++;if(v===PQ[i].a)c++}});
+  $('#score').innerHTML='Answered <b>'+a+'</b> of '+PQ.length+' · Correct <b>'+c+'</b>'+(a===PQ.length?' · '+(c===PQ.length?'Perfect run.':'Review the reasons for the ones you missed.'):'');
+}
+function answer(i,o){
+  if(pState[i]>=0)return;
+  pState[i]=o;var q=PQ[i],el=$('#q'+i);
+  $$('.opt',el).forEach(function(b){var k=+b.dataset.o;b.disabled=true;if(k===q.a)b.classList.add('ok');else if(k===o)b.classList.add('no')});
+  var names=q.o||METHODS;
+  $('.fb',el).innerHTML='<p class="why"><b>'+(o===q.a?'Correct. ':'Not quite. The best choice is '+names[q.a]+'. ')+'</b>'+q.why+'</p>';
+  hlNode(el);
+  updScore();
+}
+
+/* ---------- build ---------- */
+var BUILD={overview:panelOverview,filtration:panelFiltration,evaporation:panelEvap,fractional:panelFrac,extraction:panelExt,column:panelCol,tlc:panelTLC,practice:panelPractice};
+var tabsEl=$('#tabs'),main=$('#main');
+TABS.forEach(function(t,i){
+  var b=document.createElement('button');b.className='tab';b.id='tab-'+t[0];b.setAttribute('role','tab');b.setAttribute('aria-controls','p-'+t[0]);b.dataset.tab=t[0];b.textContent=t[1];
+  b.setAttribute('aria-selected',i===0?'true':'false');b.tabIndex=i===0?0:-1;tabsEl.appendChild(b);
+  var p=document.createElement('section');p.className='panel';p.id='p-'+t[0];p.setAttribute('role','tabpanel');p.setAttribute('aria-labelledby','tab-'+t[0]);p.hidden=i!==0;
+  p.innerHTML=BUILD[t[0]]();main.appendChild(p);
+});
+function dirtyAll(){for(var k in S)S[k].dirty=true}
+function show(id){
+  TABS.forEach(function(t){var on=t[0]===id;var b=$('#tab-'+t[0]);b.setAttribute('aria-selected',on?'true':'false');b.tabIndex=on?0:-1;$('#p-'+t[0]).hidden=!on;if(on)b.scrollIntoView({block:'nearest',inline:'center'})});
+  dirtyAll();
+  var y=main.getBoundingClientRect().top+window.scrollY-tabsEl.offsetHeight-8;
+  if(window.scrollY>y)window.scrollTo({top:Math.max(0,y),behavior:reduce?'auto':'smooth'});
+}
+function setScheme(k){
+  var real=k==='real';
+  $('#cl-model').hidden=real;$('#cl-real').hidden=!real;
+  $('#cl-sch-model').hidden=real;$('#cl-sch-real').hidden=!real;
+  $$('[data-scheme]').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.scheme===k?'true':'false')});
+  dirtyAll();
+}
+document.addEventListener('click',function(e){
+  var t=e.target.closest('[data-tab],[data-go]');
+  if(t){show(t.dataset.tab||t.dataset.go);return}
+  var sp=e.target.closest('[data-speed]');
+  if(sp){speed=+sp.dataset.speed;$$('[data-speed]').forEach(function(b){b.setAttribute('aria-pressed',+b.dataset.speed===speed?'true':'false')});return}
+  var sc=e.target.closest('[data-scheme]');
+  if(sc){setScheme(sc.dataset.scheme);return}
+  var pl=e.target.closest('[data-play]');
+  if(pl){var s=S[pl.dataset.play];s.playing=!s.playing;pl.textContent=s.playing?'Pause':'Play';s.dirty=true;return}
+  var rp=e.target.closest('[data-replay]');
+  if(rp){var s2=S[rp.dataset.replay];s2.time=0;s2.playing=true;s2.dirty=true;var pb=$('[data-play="'+s2.id+'"]');if(pb)pb.textContent='Pause';return}
+  var h=e.target.closest('[data-help]');
+  if(h){showHelp(+h.dataset.help);return}
+  var o=e.target.closest('.opt');
+  if(o){answer(+o.dataset.q,+o.dataset.o);return}
+  if(e.target.id==='p-reset'){renderPractice();return}
+});
+tabsEl.addEventListener('keydown',function(e){
+  var ids=TABS.map(function(t){return t[0]});var cur=ids.indexOf(document.activeElement.dataset.tab);
+  if(cur<0)return;var n=null;
+  if(e.key==='ArrowRight')n=(cur+1)%ids.length;if(e.key==='ArrowLeft')n=(cur-1+ids.length)%ids.length;
+  if(n!=null){e.preventDefault();show(ids[n]);$('#tab-'+ids[n]).focus()}
+});
+function showHelp(i){
+  var h=HELP[i];
+  $$('[data-help]').forEach(function(b){b.setAttribute('aria-pressed',+b.dataset.help===i?'true':'false')});
+  var a=$('#help-ans');
+  a.innerHTML='<p class="eyebrow">Use</p><h3>'+h.r+'</h3><p>'+h.w+'</p><div class="scene-bar">'+h.go.map(function(g){return '<button class="btn primary" data-go="'+g[0]+'">'+g[1]+' →</button>'}).join('')+'</div>';
+  hlNode(a);
+}
+showHelp(1);
+
+/* ---------- scene setup ---------- */
+function initFilt(){
+  var s=reg('filt',{rest:3.5}),g=$('#filt-g');
+  var solids=spawn(g,12,'c-solid',5,function(i){
+    var rx=260+((i%6)-2.5)*20+(rnd(i)-.5)*6,ry=183-1.135*Math.abs(rx-260)-5-Math.floor(i/6)*9,sx=rx+(rnd(i+9)-.5)*24;
+    return route([[sx,26],[rx,ry]]);},8,.7,.25);
+  var diss=spawn(g,16,'c-water',3,function(i){
+    var sx=260+(rnd(i+30)-.5)*70,py=183-1.135*Math.abs(sx-260);
+    return route([[sx,26],[sx,py],[260,200],[260,268],[260+(rnd(i+3)-.5)*34,292]]);},8,.1,1);
+  s.tick=function(t){step(solids,t);step(diss,t)};
+}
+function initRC(){
+  var s=reg('rc',{rest:0}),gS=$('#rc-slots'),N=24,cmp='KNO3',T=reduce?30:90,k=0,cool=!reduce,tt=T;
+  var IONS={KNO3:['K⁺','NO₃⁻'],NaCl:['Na⁺','Cl⁻']};
+  var tx=function(t){return 300+(t-20)*190/70},sy=function(v){return 250-v*.95};
+  var CS=[],AS=[],q;
+  for(q=0;q<N;q++){var col=q%4,row=Math.floor(q/4),cx0=150+(col-1.5)*38,cy0=252-row*28;CS.push([cx0-8,cy0]);AS.push([cx0+8,cy0])}
+  function ion(sign,cls,r){var g=mk('g',{},gS);mk('circle',{r:r,class:cls},g);var tx2=mk('text',{y:3.8,'text-anchor':'middle',style:'font:700 11px var(--f-body);fill:var(--on-orange);pointer-events:none'},g);tx2.textContent=sign;return {g:g,t:tx2}}
+  var P=[],lastKey='';
+  for(var i=0;i<N;i++){
+    var gem=mk('polygon',{points:'-19,-5 -10,-13 10,-13 19,-5 19,5 10,13 -10,13 -19,5',style:'fill:var(--orange-soft);stroke:var(--orange)','stroke-width':1.6,opacity:0},gS);
+    var c=ion('+','c-b',5),an=ion('−','c-a',7);
+    P.push({c:c,a:an,cx:80+rnd(i)*140,cy:112+rnd(i+50)*118,ax:80+rnd(i+90)*140,ay:112+rnd(i+130)*118,
+      x1:0,y1:0,x2:0,y2:0,s:i,st:0,u:0,t0:0,sx1:0,sy1:0,sx2:0,sy2:0,jx1:0,jy1:0,jx2:0,jy2:0,
+      ring:gem});
+    var p=P[i];p.x1=p.cx;p.y1=p.cy;p.x2=p.ax;p.y2=p.ay;
+    gS.appendChild(p.c.g);gS.appendChild(p.a.g);
+  }
+  var tk=$('#rc-ticks');
+  [20,40,60,80].forEach(function(t){mk('line',{x1:tx(t),x2:tx(t),y1:250,y2:255,class:'axis'},tk);var e=mk('text',{x:tx(t),y:270,class:'lbl sm','text-anchor':'middle'},tk);e.textContent=t});
+  [0,100,200].forEach(function(v){mk('line',{x1:285,x2:290,y1:sy(v),y2:sy(v),class:'axis'},tk);var e=mk('text',{x:282,y:sy(v)+4,class:'lbl sm','text-anchor':'end'},tk);e.textContent=v});
+  function pth(a){return a.map(function(p,i){return (i?'L':'M')+tx(p[0]).toFixed(1)+','+sy(p[1]).toFixed(1)}).join(' ')}
+  $('#rc-k').setAttribute('d',pth(KNO3));$('#rc-n').setAttribute('d',pth(NACL));
+  function update(){
+    T=+$('#rc-T').value;var a=cmp==='KNO3'?KNO3:NACL,s90=sol(a,90),sT=sol(a,T),frac=(s90-sT)/s90,io=IONS[cmp];
+    k=Math.round(frac*N);
+    $('#rc-Tv').textContent=T;
+    $('#rc-temp').textContent=T>=90?'Hot saturated solution, 90 °C':'Cooled from 90 °C to '+T+' °C';
+    $('#rc-out').innerHTML=(cmp==='KNO3'?'KNO₃':'NaCl')+' dissolves <b>'+Math.round(s90)+'</b> g per 100 g water at 90 °C and <b>'+Math.round(sT)+'</b> g at '+T+' °C. Crystals recovered: <b>'+Math.round(frac*100)+'%</b>.';
+    lastKey='';
+    $('#rc-lc').textContent='Cation ('+io[0]+')';$('#rc-la').textContent='Anion ('+io[1]+')';
+    P.forEach(function(p){p.c.t.textContent='+';p.a.t.textContent='−'});
+    setA($('#rc-mT'),{x1:tx(T),x2:tx(T)});setA($('#rc-m90'),{x1:tx(90),x2:tx(90)});
+    setA($('#rc-c90'),{cx:tx(90),cy:sy(s90)});setA($('#rc-cT'),{cx:tx(T),cy:sy(sT)});
+    $('#rc-k').setAttribute('stroke-width',cmp==='KNO3'?4.5:2);$('#rc-n').setAttribute('stroke-width',cmp==='NaCl'?4.5:2);
+    s.dirty=true;
+  }
+  function startCool(){tt=90;$('#rc-T').value=90;cool=true;update()}
+  $('#rc-T').addEventListener('input',function(){cool=false;tt=+this.value;update()});
+  $('[data-replay="rc"]').addEventListener('click',startCool);
+  $$('[data-rc]').forEach(function(b){b.addEventListener('click',function(){cmp=b.dataset.rc;$$('[data-rc]').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});update()})});
+  $('#rc-T').value=T;
+  function ionsTxt(){
+    var f=0,L=0;P.forEach(function(p){if(p.st===0)f++;if(p.st===3)L++});
+    var key=f+'/'+L+'/'+cmp;if(key===lastKey)return;lastKey=key;var io=IONS[cmp];
+    $('#rc-ions').innerHTML='Free in solution: <b>'+f+'</b> '+io[0]+' and <b>'+f+'</b> '+io[1]+'. Joined as solid: <b>'+(N-f)+'</b> pairs ('+L+' settled in the pile).';
+  }
+  s.tick=function(t,dt){
+    if(cool){tt=Math.max(30,tt-dt*7);$('#rc-T').value=Math.round(tt);if(tt<=30)cool=false;if(+$('#rc-T').value!==T)update()}
+    var moving=false,a=Math.min(1,dt*2.6),rows=Math.ceil(k/4),top=252-(Math.max(rows,1)-1)*28-24;
+    P.forEach(function(p,j){
+      var tcx,tcy,tax,tay;
+      if(j>=k&&p.st>0){p.st=0;p.u=0}
+      if(p.st===0&&j<k&&(j===0||(P[j-1].st>0&&t-P[j-1].t0>.4)||P[j-1].st>1&&false)){
+        p.st=1;p.u=0;p.t0=t;p.sx1=p.x1;p.sy1=p.y1;p.sx2=p.x2;p.sy2=p.y2;
+        p.mx=(p.x1+p.x2)/2;p.my=Math.min((p.y1+p.y2)/2,top-10);
+      }
+      if(p.st===0){
+        tcx=p.cx+Math.sin(t*1.9+p.s*5)*7;tcy=Math.min(p.cy+Math.cos(t*1.6+p.s*3)*7,k?top:300);
+        tax=p.ax+Math.sin(t*1.5+p.s*7)*7;tay=Math.min(p.ay+Math.cos(t*1.8+p.s*2)*7,k?top:300);
+        p.x1+=(tcx-p.x1)*a;p.y1+=(tcy-p.y1)*a;p.x2+=(tax-p.x2)*a;p.y2+=(tay-p.y2)*a;
+        setA(p.ring,{opacity:0});
+      }else if(p.st===1){
+        p.u=Math.min(1,p.u+dt/1.0);var e=ease(p.u);
+        p.x1=lerp(p.sx1,p.mx-8,e);p.y1=lerp(p.sy1,p.my,e);p.x2=lerp(p.sx2,p.mx+8,e);p.y2=lerp(p.sy2,p.my,e);
+        p.ring.setAttribute('transform','translate('+((p.x1+p.x2)/2).toFixed(1)+' '+((p.y1+p.y2)/2).toFixed(1)+') scale('+(.6+.4*e).toFixed(2)+')');setA(p.ring,{opacity:e});
+        if(p.u>=1){p.st=2;p.u=0;p.jx1=p.x1;p.jy1=p.y1;p.jx2=p.x2;p.jy2=p.y2}
+        moving=true;
+      }else if(p.st===2){
+        p.u=Math.min(1,p.u+dt/1.3);var e2=p.u*p.u*(3-2*p.u);
+        p.x1=lerp(p.jx1,CS[j][0],e2);p.y1=lerp(p.jy1,CS[j][1],e2);p.x2=lerp(p.jx2,AS[j][0],e2);p.y2=lerp(p.jy2,AS[j][1],e2);
+        p.ring.setAttribute('transform','translate('+((p.x1+p.x2)/2).toFixed(1)+' '+((p.y1+p.y2)/2).toFixed(1)+')');
+        if(p.u>=1){p.st=3}
+        moving=true;
+      }else{p.x1=CS[j][0];p.y1=CS[j][1];p.x2=AS[j][0];p.y2=AS[j][1];p.ring.setAttribute('transform','translate('+((p.x1+p.x2)/2).toFixed(1)+' '+p.y1.toFixed(1)+')');setA(p.ring,{opacity:1})}
+      p.c.g.setAttribute('transform','translate('+p.x1.toFixed(1)+' '+p.y1.toFixed(1)+')');
+      p.a.g.setAttribute('transform','translate('+p.x2.toFixed(1)+' '+p.y2.toFixed(1)+')');
+    });
+    var L=0;P.forEach(function(p){if(p.st===3)L++});
+    ionsTxt();
+    return moving||cool;
+  };
+  update();
+}
+function initEv(){
+  var s=reg('ev',{rest:8}),g=$('#ev-g'),salts=[],vap=[];
+  for(var i=0;i<18;i++){salts.push({r:mk('rect',{width:7,height:7,class:'c-b'},g),x:205+(i%9)*13.75,y:(i<9?234:223)-rnd(i)*3,s:i})}
+  for(var j=0;j<14;j++)vap.push({c:mk('circle',{r:3.2,class:'c-vap',cx:-50,cy:-50},g),x0:170+rnd(j+40)*180,ph:j/14,s:j});
+  s.tick=function(t){
+    var c=t%14,f=c<10?ease(c/10):1,ys=185+f*58,dry=clamp((f-.8)/.2);
+    var w=$('#ev-water');setA(w,{y:ys,height:250-ys});
+    salts.forEach(function(p){var jx=Math.sin(t*3+p.s*4)*(1-dry)*2.5,jy=Math.cos(t*2.6+p.s*3)*(1-dry)*2;setA(p.r,{x:p.x+jx-3.5,y:p.y+jy-3.5,rx:lerp(3.5,.8,dry)})});
+    var vis=clamp((1-f)*6);
+    vap.forEach(function(p){var u=((t/3.2)+p.ph)%1;setA(p.c,{cx:p.x0+Math.sin(u*6+p.s)*10,cy:ys-u*(ys-45),opacity:(u<.1?u/.1:(u>.8?(1-u)/.2:1))*vis})});
+    setA($('#ev-flame'),{transform:'translate(260 296) scale(1 '+(1+.12*Math.sin(t*9)).toFixed(3)+') translate(-260 -296)'});
+  };
+}
+function initSD(){
+  var s=reg('sd',{rest:9}),g=$('#sd-g');
+  var salt=jigs(g,10,'c-b',4,function(i){var x,y,n=0;do{x=100+(rnd(i+n*7)-.5)*76;y=238+(rnd(i+n*7+5)-.5)*44;n++}while(Math.hypot(x-100,y-215)>44&&n<20);return [x,y]},3);
+  var vap=spawn(g,14,'c-vap',3.2,function(i){return route([[100+(rnd(i)-.5)*22,202],[100,114],[165,114],[390,207]])},5.5,0);
+  var drops=[0,1,2].map(function(){return mk('circle',{r:3.5,class:'c-water',cx:-50,cy:-50},g)});
+  s.tick=function(t){
+    stepJ(salt,t);step(vap,t);
+    var c=t%16,h=55*clamp(c/13)*.9,ys=309-h;
+    setA($('#sd-liq'),{y:ys,height:h+1});
+    drops.forEach(function(d,j){var u=((t/1.6)+j/3)%1,x,y;
+      if(u<.35){var q=u/.35;x=lerp(392,430,q);y=lerp(210,248,q)}else{var r=(u-.35)/.65;x=430;y=lerp(248,Math.max(250,ys),r*r)}
+      setA(d,{cx:x,cy:y,opacity:c<.5?0:1})});
+    setA($('#sd-flame'),{transform:'translate(100 320) scale(1 '+(1+.12*Math.sin(t*9)).toFixed(3)+') translate(-100 -320)'});
+  };
+}
+function initFD(){
+  var s=reg('fd',{rest:8}),g=$('#fd-g');
+  var jA=jigs(g,7,'c-a',4,function(i){var x,y,n=0;do{x=90+(rnd(i+n*3)-.5)*74;y=325+(rnd(i+n*3+9)-.5)*40;n++}while(Math.hypot(x-90,y-305)>44&&n<20);return [x,y]},3);
+  var jB=jigs(g,9,'c-b',4,function(i){var x,y,n=0;do{x=90+(rnd(i+n*3+60)-.5)*76;y=325+(rnd(i+n*3+70)-.5)*40;n++}while(Math.hypot(x-90,y-305)>44&&n<20);return [x,y]},3);
+  var A=spawn(g,9,'c-a',4,function(i){var sx=90+(rnd(i)-.5)*14;return route([[sx,292],[90,70],[90,66],[150,66],[395,178]])},7,0);
+  var B=spawn(g,8,'c-b',4,function(i){var j=(rnd(i+5)-.5)*18,h=110+rnd(i+11)*110;return route([[90+j,295],[90+j*.5,h],[90+j,295]])},6,0);
+  var drops=[0,1,2].map(function(){return mk('circle',{r:3.5,class:'c-a',cx:-50,cy:-50},g)});
+  s.tick=function(t){
+    stepJ(jA,t);stepJ(jB,t);step(A,t);step(B,t);
+    var c=t%16,h=60*clamp(c/13)*.9,ys=349-h;
+    setA($('#fd-liq'),{y:ys,height:h+1});
+    drops.forEach(function(d,j){var u=((t/1.5)+j/3)%1,x,y;
+      if(u<.3){var q=u/.3;x=lerp(397,445,q);y=lerp(184,232,q)}else{var r=(u-.3)/.7;x=445;y=lerp(232,Math.max(234,ys),r*r)}
+      setA(d,{cx:x,cy:y,opacity:c<.5?0:1})});
+    setA($('#fd-flame'),{transform:'translate(90 398) scale(1 '+(1+.12*Math.sin(t*9)).toFixed(3)+') translate(-90 -398)'});
+  };
+}
+
+/* extraction: three rounds, less solute left each time */
+function initEX(){
+  var R=13,TOT=39,N=24,ST=[0,14,20],EN=[14,20,22],B=[0,1.2,3.8,6.3,8.3,10,12];
+  var s=reg('ex',{rest:36}),g=$('#ex-gd'),D=[];
+  for(var i=0;i<N;i++){
+    D.push({c:mk('circle',{r:4.3,class:'c-b'},g),i:i,
+      wx:165+rnd(i)*90,wy:205+rnd(i+20)*35,ex:160+rnd(i+40)*100,ey:128+rnd(i+60)*48,
+      bx:400+(i%6)*14,by:403-Math.floor(i/6)*11,x:0,y:0});
+    D[i].x=D[i].wx;D[i].y=D[i].wy;
+  }
+  var names=['Add fresh ether','Shake','Let the layers settle','Drain the water layer into the small flask','Pour the ether layer into the collecting beaker','Return the water layer to the funnel','Return the water layer to the funnel'];
+  var lastKey='',lastN=-1;
+  var seg=$$('#ex-bar > div'),gr=[58,24,10],tot=[0,0.29,0.41,0.46],pc=[0,58,82,92],txt=['+0.29 g','+0.12 g','+0.05 g'];
+  function hw(y){if(y<150)return 14+(y-62)/88*84;if(y<252)return 98-(y-150)/102*50;if(y<288)return 48-(y-252)/36*29;return 19}
+  function inF(x,y){var w=Math.max(8,hw(y)-7);return [210+clamp(x-210,-w,w),y]}
+  function rot(p,a){var r=a*Math.PI/180,dx=p[0]-210,dy=p[1]-200;return [210+dx*Math.cos(r)-dy*Math.sin(r),200+dx*Math.sin(r)+dy*Math.cos(r)]}
+  function fpos(i,E0){var j=i-E0;return [188+(j%5)*11,410-Math.floor(j/5)*10]}
+  function bar(n){
+    var used=0;
+    for(var k=0;k<3;k++){var w=k<n?gr[k]:0;used+=w;seg[k].style.width=w+'%';seg[k].textContent=w>=10?txt[k]:''}
+    seg[3].style.width=(100-used)+'%';seg[3].textContent='left in water';
+    $('#ex-out').innerHTML=n===0?'Nothing extracted yet: <b>0.50 g</b> of solute is in the water.':'After <b>'+n+'</b> extraction'+(n>1?'s':'')+': <b>'+tot[n].toFixed(2)+' g</b> of 0.50 g recovered = yield <b>'+pc[n]+'%</b> ((recovered ÷ original) × 100). Left in the water: '+(0.5-tot[n]).toFixed(2)+' g.';
+  }
+  $$('[data-exr]').forEach(function(b){b.addEventListener('click',function(){s.time=(+b.dataset.exr-1)*R+.01;s.playing=true;s.dirty=true;var pb=$('[data-play="ex"]');if(pb)pb.textContent='Pause'})});
+  s.tick=function(t,dt){
+    var c=t%TOT,r=Math.min(2,Math.floor(c/R)),lc=c-r*R,S0=ST[r],E0=EN[r];
+    var ph=lc<B[1]?0:lc<B[2]?1:lc<B[3]?2:lc<B[4]?3:lc<B[5]?4:lc<B[6]?5:6;
+    var drain=lc<B[3]?0:clamp((lc-B[3])/(B[4]-B[3]));
+    var ret=(r<2&&lc>=B[5])?clamp((lc-B[5])/(B[6]-B[5])):0;
+    var I=190;
+    if(lc>=B[3])I=190+126*ease(drain);
+    if(lc>=B[4])I=316;
+    if(r<2&&lc>=B[5])I=316-126*ease(ret);
+    var eh,etop,eop=1;
+    if(lc<B[1]){eh=100*ease(lc/B[1]);etop=190-eh}
+    else if(lc<B[3]){eh=100;etop=90}
+    else if(lc<B[4]){eh=100;etop=90+(I-190)}
+    else if(lc<B[5]){eh=100;etop=216;eop=1-ease((lc-B[4])/(B[5]-B[4]))}
+    else{eh=0;etop=216;eop=0}
+    setA($('#ex-ether'),{y:etop,height:eh,opacity:eop});
+    setA($('#ex-aq'),{y:I,height:Math.max(0,320-I)});
+    var fh=lc<B[3]?0:(lc<B[4]?50*ease(drain):50);
+    if(r<2&&lc>=B[5])fh=50*(1-ease(ret));
+    setA($('#ex-fliq'),{y:415-fh,height:fh});
+    var pb=lc<B[4]?0:(lc<B[5]?ease((lc-B[4])/(B[5]-B[4])):1);
+    var bl=20*(r+pb);
+    setA($('#ex-bliq'),{y:412-bl,height:bl});
+    var ang=ph===1?9*Math.sin(lc*9):0;
+    $('#ex-fun').setAttribute('transform',ph===1?'rotate('+ang.toFixed(2)+' 210 200)':'');
+    var st=$('#ex-stream');
+    if(ph===3&&drain>.02&&drain<.98){setA(st,{y2:415-fh,opacity:.85})}else st.setAttribute('opacity',0);
+    var po=$('#ex-pour');
+    if(lc<B[1]){setA(po,{y2:Math.max(60,etop),opacity:.9})}else po.setAttribute('opacity',0);
+    var a=Math.min(1,dt*5),p4=ease((lc-B[4])/(B[5]-B[4]));
+    D.forEach(function(p){
+      var i=p.i,x,y,q;
+      if(i<S0){x=p.bx;y=p.by}
+      else{
+        var eth=i<E0,fp=fpos(i,E0);
+        if(ph===0){p.x=p.wx;p.y=p.wy;q=inF(p.x,p.y);x=q[0];y=q[1]}
+        else if(ph===1){
+          var slot=Math.floor(lc*5);
+          p.x+=(160+rnd(i*9+slot)*100-p.x)*a;p.y+=(112+rnd(i*9+slot+3)*128-p.y)*a;
+          q=rot(inF(p.x,p.y),ang);x=q[0];y=q[1];
+        }else if(ph===2){
+          p.x+=((eth?p.ex:p.wx)-p.x)*a;p.y+=((eth?p.ey:p.wy)-p.y)*a;q=inF(p.x,p.y);x=q[0];y=q[1];
+        }else if(ph===3){
+          if(eth){q=inF(p.ex,p.ey+(I-190));x=q[0];y=q[1]}
+          else{q=route([[p.wx,p.wy],[210,300],[210,332],fp])(ease(drain));x=q[0];y=q[1]}
+        }else if(ph===4){
+          if(eth){var s0=inF(p.ex,p.ey+126);q=route([s0,[210,60],[330,40],[430,250],[p.bx,p.by]])(p4);x=q[0];y=q[1]}
+          else{x=fp[0];y=fp[1]}
+        }else{
+          if(eth){x=p.bx;y=p.by}
+          else if(r<2){
+            if(ph===5){q=route([fp,[96,382],[96,50],[210,48],[p.wx,p.wy]])(ease(ret));x=q[0];y=q[1]}
+            else{x=p.wx;y=p.wy}
+          }else{x=fp[0];y=fp[1]}
+        }
+      }
+      setA(p.c,{cx:x,cy:y});
+    });
+    var key=r+'-'+ph;
+    if(key!==lastKey){lastKey=key;var el=$('#ex-phase');
+      if(el)el.textContent='Round '+(r+1)+' of 3 · '+(r===2&&ph>=5?'Done: ether extracts combined':names[ph]);
+      $$('[data-exr]').forEach(function(b){b.setAttribute('aria-pressed',+b.dataset.exr===r+1?'true':'false')});}
+    var n=r+(lc>=B[5]?1:0);
+    if(n!==lastN){lastN=n;bar(n)}
+  };
+  bar(0);
+}
+
+function initCL(){
+  var s=reg('cl',{rest:9}),shift=60,H=[$('#cl-f0'),$('#cl-f1'),$('#cl-f2')],cols=['var(--liquid)','var(--dye-y)','var(--dye-b)'];
+  var Y0=6,Y1=8,B0=10,B1=12.4;
+  s.tick=function(t,dt){
+    var c=t%16,h=16+1.2*c,yy=112+24*c,yb=112+14*c;
+    setA($('#cl-y'),{y:yy-h/2,height:h});setA($('#cl-b'),{y:yb-h/2,height:h*1.1});
+    var a=c<5.8?0:c<9?1:2,target=60-60*a;
+    if(c<.05)shift=target;shift+=(target-shift)*Math.min(1,dt*5);
+    $('#cl-rack').setAttribute('transform','translate('+shift.toFixed(2)+' 0)');
+    var hs=[c<3.5?0:clamp((c-3.5)/2.3)*16,c<Y0?0:clamp((c-Y0)/(Y1-Y0))*34,c<B0?0:clamp((c-B0)/(B1-B0))*34];
+    H.forEach(function(r,k){setA(r,{y:362-hs[k],height:hs[k],fill:cols[k]})});
+    var dr=$('#cl-drip');
+    if(c>=3.5&&c<13.5){
+      var ph=(c*2)%1,surf=362-hs[a],col=(c>=Y0&&c<Y1)?'var(--dye-y)':(c>=B0&&c<B1)?'var(--dye-b)':'var(--p-water)';
+      setA(dr,{cy:304+ph*Math.max(10,surf-304),opacity:1});dr.style.fill=col;
+    }else setA(dr,{opacity:0});
+  };
+}
+
+/* real scheme: colorless fractions, TLC of each fraction, visualize */
+function initCR(){
+  var TOT=44,s=reg('cr',{rest:43}),shift=20,RFA=.72,RFB=.32;
+  var LX=[0,1,2,3,4,5,6,7].map(function(j){return 325+j*29.5});
+  var AMT={A:[1,0,0,.5,1,.4,0,0],B:[0,1,0,0,0,.4,1,.8]};
+  var spots=[],rings=[],sg=$('#cr-spots'),rg=$('#cr-rings'),lg=$('#cr-lab'),pg=$('#cr-pip');
+  ['A','B','1','2','3','4','5','6'].forEach(function(n,j){var e=mk('text',{x:LX[j],y:316,class:'pk','text-anchor':'middle'},lg);e.textContent=n});
+  function arrive(l){return l<2?(l===0?19:19.6):20.2+1.6*(l-2)+1}
+  for(var l=0;l<8;l++){['A','B'].forEach(function(c){
+    var amt=AMT[c][l];if(amt<=0)return;
+    spots.push({l:l,c:c,amt:amt,e:mk('ellipse',{rx:0,ry:0,cx:LX[l],cy:300},sg),r:mk('ellipse',{rx:11,ry:9,cx:LX[l],cy:300,fill:'none',style:'stroke:var(--plate-ink)','stroke-dasharray':'3 2','stroke-width':1.4,opacity:0},rg)});
+  })}
+  var pips=[0,1,2,3,4,5].map(function(k){return mk('circle',{r:4,cx:-50,cy:-50,style:'fill:var(--p-water)'},pg)});
+  var H=[0,1,2,3,4,5].map(function(k){return $('#cr-f'+k)});
+  var names=[[0,'Collect colorless fractions, one tube at a time'],[18,'Spot a drop of each fraction on a TLC plate, beside references A and B'],[29.5,'Develop the plate'],[38,'Visualize with a UV lamp or stain: which fractions hold which compound?']];
+  var lastP=-1,lastNote=0;
+  s.tick=function(t,dt){
+    var c=t%TOT;
+    var col=$('#cr-col');col.setAttribute('opacity',c<18?1:.25);
+    var h=Math.min(40,14+1.6*c),yA=78+122*(c/7.5),yB=78+122*(c/13.5);
+    setA($('#cr-a'),{y:yA-h/2,height:h});setA($('#cr-b'),{y:yB-h/2,height:h*1.1});
+    var a=Math.min(5,Math.floor(c/3)),target=c<18?20-46*a:0;
+    if(c<.05)shift=target;shift+=(target-shift)*Math.min(1,dt*5);
+    $('#cr-rack').setAttribute('transform','translate('+shift.toFixed(2)+' 0)');
+    var hs=H.map(function(r,k){return 36*clamp((c-3*k)/3)});
+    H.forEach(function(r,k){setA(r,{y:346-hs[k],height:hs[k]})});
+    var dr=$('#cr-drip');
+    if(c>=.8&&c<18){var ph=(c*2)%1,surf=346-hs[a];setA(dr,{cy:236+ph*Math.max(10,surf-236),opacity:1})}else setA(dr,{opacity:0});
+    pips.forEach(function(p,k){
+      var u=(c-(20.2+1.6*k))/1;
+      if(u>0&&u<1){var q=route([[40+46*k,288],[40+46*k,262],[LX[k+2],262],[LX[k+2],300]])(ease(u));setA(p,{cx:q[0],cy:q[1],opacity:1})}else setA(p,{opacity:0});
+    });
+    var u3=clamp((c-29.5)/7),Fpx=230*Math.sqrt(u3),vis=ease((c-38)/1.2),ring=ease((c-40)/1);
+    var fr=$('#cr-front');setA(fr,{y1:300-Fpx,y2:300-Fpx,opacity:c>=29.5?1:0});
+    spots.forEach(function(p){
+      var g=ease((c-arrive(p.l))/.5),rf=p.c==='A'?RFA:RFB,cy=300-rf*Fpx;
+      var rx=(3.5+4.5*p.amt)*g,ry=(3+3*p.amt)*g;
+      p.e.setAttribute('style','fill:'+(vis>0?(p.c==='A'?'var(--p-a)':'var(--p-b)'):'var(--muted)'));
+      setA(p.e,{cy:cy,rx:rx,ry:ry,opacity:vis>0?(.3+.7*vis)*Math.min(1,g*2):.28*Math.min(1,g*2)});
+      setA(p.r,{cy:cy,opacity:g>.5?ring*.85:0});
+    });
+    $('#cr-lamp').setAttribute('opacity',vis);
+    var pi=c<18?0:c<29.5?1:c<38?2:3;
+    if(pi!==lastP){lastP=pi;var el=$('#cr-phase');if(el)el.textContent=names[pi][1]}
+    var note=c>=38?2:1;
+    if(note!==lastNote){lastNote=note;$('#cr-note').innerHTML=note===2?'Fractions <b>2 to 4</b> contain A. Fractions <b>4 to 6</b> contain B. Fraction 4 shows two spots, so it is a mixture. Combine F2 + F3 for pure A and F5 + F6 for pure B.':'Watch the four stages. Spots stay faint until the plate is visualized.'}
+  };
+}
+
+
+function initSL(){
+  var s=reg('sl',{rest:47}),fx=$('#sl-fx'),N=30,TOT=48,C=14;
+  var gB=mk('g',{},fx),gBe=mk('g',{},fx),gD=mk('g',{},fx),gW=mk('g',{},fx);
+  var fw=route([[125,170],[125,80],[405,80],[405,170]]),rt=route([[405,330],[405,385],[125,385],[125,330]]);
+  var bub=[];
+  for(var i=0;i<14;i++){bub.push({k:'f',ph:i/14,e:mk('circle',{r:3,fill:'none',style:'stroke:var(--glass)','stroke-width':1.6},gB)});bub.push({k:'r',ph:i/14,e:mk('circle',{r:3,fill:'none',style:'stroke:var(--glass)','stroke-width':1.6},gB)})}
+  for(i=0;i<12;i++)bub.push({k:'a',ph:i/12,i:i,e:mk('circle',{r:3,fill:'none',style:'stroke:var(--glass)','stroke-width':1.6},gB)});
+  var HB=[],BK=[[245,305],[280,312],[315,305],[262,284],[298,286],[330,300],[240,268],[322,272]];
+  [170,205,240,275].forEach(function(y){HB.push([100,y]);HB.push([148,y])});
+  var beans=HB.map(function(h,b){
+    var g=mk('g',{},gBe);mk('ellipse',{rx:12,ry:8,style:'fill:var(--bean)'},g);mk('path',{d:'M-10,-1 Q0,-4 10,1',fill:'none',style:'stroke:var(--surface)','stroke-width':1.5,opacity:.8},g);return {g:g,a:(rnd(b)-.5)*70};
+  });
+  var OFF=[[-6,-2],[5,2],[-1,4],[7,-3]];
+  var dots=[];
+  for(i=0;i<N;i++){
+    var cyc=i<17?0:i<25?1:i<29?2:-1,n=i<17?i:i<25?i-17:i-25;
+    dots.push({e:mk('circle',{r:2.7,class:'s-y',stroke:'var(--surface)','stroke-width':.6},gD),b:i%8,o:OFF[Math.floor(i/8)%4],cyc:cyc,
+      st:cyc===0?.3+.12*n:.3+.2*n,tx:370+rnd(i)*70,ty:168+rnd(i+9)*72,px:368+rnd(i+3)*72,py:272+rnd(i+5)*52,x:0,y:0,n:n});
+  }
+  var drops=[];for(i=0;i<10;i++)drops.push({e:mk('circle',{r:2.3,class:'c-water'},gW),sx:225+rnd(i)*110,sy:240+rnd(i+4)*70,b:i%8});
+  var bar=$$('#sl-bar > div'),lastKey='';
+  var names=['Step 1 · Pre-soak: water moistens and softens the green beans','Step 2 · Extract caffeine: CO₂ at 65 °C and 300 atm flows through the beans and dissolves the caffeine','Step 3 · Remove caffeine: the caffeine-laden CO₂ meets water, which takes the caffeine','Step 4 · Recirculate: clean CO₂ is pumped back to the beans'];
+  function barTxt(left,out,cy){
+    var l=Math.round(100*left/N),o=100-l;
+    bar[0].style.width=l+'%';bar[0].textContent=l>=12?l+'% left':'';bar[1].style.width=o+'%';bar[1].textContent=o>=12?o+'% in water':'';
+    $('#sl-out').innerHTML=(cy<0?'Before extraction: ':'Cycle '+(cy+1)+' of 3 · ')+'caffeine left in the beans: <b>'+l+'%</b> · collected in the water: <b>'+o+'%</b>';
+  }
+  s.tick=function(t){
+    var c=t%TOT,s1=c<6,cy=s1?-1:Math.floor((c-6)/C),lc=s1?0:(c-6)-cy*C,stage=s1?1:lc<6.5?2:lc<10.5?3:4;
+    var vis=s1?.3+.7*ease((c-4.4)/1.6):1;
+    $('#sl-vs').setAttribute('opacity',vis.toFixed(2));
+    $('#sl-bk').setAttribute('opacity',(c<5.2?1:1-ease((c-5.2)/.8)).toFixed(2));
+    $('#sl-gg').setAttribute('opacity',clamp((c-5.4)/.8).toFixed(2));
+    var tm=c<6?20:20+45*clamp((c-6)/2.5),pr=c<6?1:1+299*clamp((c-6)/2.5);
+    $('#sl-tv').textContent=Math.round(tm)+' °C';$('#sl-pv').textContent=Math.round(pr)+' atm';
+    var f=clamp((c-6)/.8),sw=1+.14*ease(c/4.5);
+    beans.forEach(function(b,k){
+      var h=HB[k],q=BK[k],x,y;
+      if(c<4.8){x=q[0]+Math.sin(t*1.6+k*2)*2.5;y=q[1]+Math.cos(t*1.3+k*3)*2}
+      else if(c<6){var u=ease((c-4.8)/1.2);x=lerp(q[0],h[0],u);y=lerp(q[1],h[1],u)-Math.sin(u*Math.PI)*45}
+      else{x=h[0];y=h[1]}
+      b.x=x;b.y=y;b.g.setAttribute('transform','translate('+x.toFixed(1)+' '+y.toFixed(1)+') rotate('+b.a.toFixed(0)+') scale('+sw.toFixed(2)+')');
+    });
+    var left=0;
+    dots.forEach(function(d,i){
+      var bx=beans[d.b].x+d.o[0]+Math.sin(t*3+i)*.8,by=beans[d.b].y+d.o[1]+Math.cos(t*2.6+i)*.8,x=bx,y=by,tk=s1?-1:c-6-C*Math.max(0,d.cyc),stay=true;
+      if(d.cyc>=0&&!s1){
+        var k0=tk;
+        if(d.cyc>cy||k0<d.st)stay=true;
+        else if(k0<d.st+3.4){var u=(k0-d.st)/3.4,q=route([[bx,by],[125,176],[125,80],[405,80],[405,168],[d.tx,d.ty]])(u);x=q[0];y=q[1];stay=u<.12}
+        else{
+          stay=false;var tr=6.8+.05*d.n,cx=d.tx+Math.sin(t*2+i)*4,cyy=d.ty+Math.cos(t*1.7+i)*4;
+          if(k0<tr){x=cx;y=cyy}
+          else if(k0<tr+1.4){var w=ease((k0-tr)/1.4);x=lerp(cx,d.px,w);y=lerp(cyy,d.py,w)}
+          else{x=d.px+Math.sin(t*1.8+i)*3;y=d.py+Math.cos(t*1.5+i)*3}
+        }
+      }
+      if(stay)left++;
+      d.e.setAttribute('cx',x.toFixed(1));d.e.setAttribute('cy',y.toFixed(1));
+    });
+    bub.forEach(function(b,j){
+      var u=((t/(b.k==='a'?2.4:3.6))+b.ph)%1,x,y,o=0,env=u<.08?u/.08:u>.92?(1-u)/.08:1;
+      if(b.k==='f'){var q=fw(u);x=q[0];y=q[1];o=(!s1&&stage===2)?1:0}
+      else if(b.k==='r'){var q2=rt(u);x=q2[0];y=q2[1];o=(!s1&&(stage===4||(stage===3&&lc>8.5)))?1:0}
+      else{x=88+rnd(b.i)*74+Math.sin(u*9+b.i)*3;y=lerp(330,150,u);o=(!s1&&(stage===2||stage===4))?1:.0}
+      setA(b.e,{cx:x,cy:y,opacity:o*env*.85});
+    });
+    drops.forEach(function(d,k){
+      var u=((t/2.4)+k/10)%1,bn=beans[d.b],x=lerp(d.sx,bn.x,u),y=lerp(d.sy,bn.y,u);
+      setA(d.e,{cx:x,cy:y,opacity:c<4.4?Math.sin(u*Math.PI):0});
+    });
+    $('#sl-blade').setAttribute('transform','rotate('+((stage===4||stage===3)&&!s1?t*220%360:0).toFixed(0)+')');
+    var key=stage+'-'+cy;
+    if(key!==lastKey){lastKey=key;$('#sl-phase').textContent=names[stage-1]+(cy>=0?' (cycle '+(cy+1)+' of 3)':'')}
+    barTxt(left,0,cy);
+    return false;
+  };
+}
+
+function initGC(){
+  var s=reg('gc',{rest:11}),g=$('#gc-g');
+  var cA=193,cB=308,cC=442;
+  function f(x){return 215-(60*Math.exp(-Math.pow(x-cA,2)/(2*81))+110*Math.exp(-Math.pow(x-cB,2)/(2*169))+75*Math.exp(-Math.pow(x-cC,2)/(2*289)))}
+  var d='';for(var x=40;x<=500;x+=2)d+=(x===40?'M':'L')+x+','+f(x).toFixed(1);
+  $('#gc-trace').setAttribute('d',d);
+  var cp='M130,42 ';for(var u=0;u<=270;u+=6)cp+='L'+(130+u)+','+(42+Math.sin(u/9)*14).toFixed(1)+' ';
+  $('#gc-coil').setAttribute('d',cp);
+  var gas=spawn(g,12,'c-gas',2.6,function(){return route([[22,42],[498,42]])},3,0);
+  var pa=mk('circle',{r:5,class:'c-a'},g),pb=mk('circle',{r:5,class:'c-b'},g),pc=mk('circle',{r:5,class:'c-c'},g);
+  var DUR=[4,7,10.5];
+  function place(p,D,c){var u=clamp(c/D),x=lerp(90,430,u);setA(p,{cx:x,cy:42,opacity:c>D?clamp(1-(c-D)/.6):1})}
+  s.tick=function(t){
+    step(gas,t);
+    var c=t%12;
+    place(pa,DUR[0],c);place(pb,DUR[1],c);place(pc,DUR[2],c);
+    var xc=40+c/12*460;
+    setA($('#gc-cr'),{width:xc-38});setA($('#gc-cur'),{x1:xc,x2:xc});
+    [['#gc-la',cA,60],['#gc-lb',cB,110],['#gc-lc',cC,75]].forEach(function(l){var e=$(l[0]);setA(e,{x:l[1],y:215-l[2]-8,opacity:xc>l[1]?1:0})});
+  };
+}
+
+function initTL(){
+  var s=reg('tl',{rest:28}),BASE=290,END=28,RUN=10,T0=10.7,sv=2,cm=CDEF.slice(),stat='polar',sel=-1;
+  var COMP=[{c:'s-y',v:'--dye-y',i:0},{c:'s-p',v:'--dye-p',i:1},{c:'s-b',v:'--dye-b',i:2}];
+  var rf=function(c){var P=CMP[cm[c.i]][1],Sv=SOLV[sv][1],kk=stat==='polar'?Math.exp(.5*P-.5*Sv-1.5):Math.exp(.5*(11-P)-.5*(10.2-Sv)-1.5);return clamp(1/(1+kk),.03,.95)};
+  var LX=[80,140,200,260],DROP=['var(--p-solid)','var(--dye-y)','var(--dye-p)','var(--dye-b)'];
+  var sp=$('#tl-spots'),rg=$('#tl-ring'),lab=$('#tl-lab'),xm=$('#tl-xm'),spots=[],labs=[];
+  [[2,0],[1,0],[0,0],[0,1],[1,2],[2,3]].forEach(function(d){
+    spots.push({k:d[0],lane:d[1],e:mk('ellipse',{rx:0,ry:0,cx:LX[d[1]],cy:BASE,class:COMP[d[0]].c,opacity:.9},sp),
+      r:mk('ellipse',{rx:13,ry:10,cx:LX[d[1]],cy:BASE,fill:'none',style:'stroke:var(--plate-ink)','stroke-dasharray':'3 2','stroke-width':1.5,opacity:0},rg)});
+  });
+  ['Mix','A','B','C'].forEach(function(n,i){var e=mk('text',{x:LX[i],y:BASE+17,class:'pk','text-anchor':'middle',opacity:0},lab);e.textContent=n;labs.push(e);
+    mk('line',{x1:LX[i]-4,x2:LX[i]+4,y1:BASE-4,y2:BASE+4,style:'stroke:var(--plate-ink)','stroke-width':1.3},xm);mk('line',{x1:LX[i]+4,x2:LX[i]-4,y1:BASE-4,y2:BASE+4,style:'stroke:var(--plate-ink)','stroke-width':1.3},xm)});
+  var names=[[0,'Draw the baseline in pencil and label the lanes'],[1.2,'Spot each sample with a capillary, one lane at a time'],[7.2,'Lower the plate into the solvent (below the baseline)'],[9.7,'Close the lid'],[10.7,'Develop: the solvent rises by capillary action'],[20.7,'Open the lid'],[21.7,'Take the plate out'],[23.7,'Mark the solvent front at once, in pencil'],[25.2,'Circle the spots, then measure d and F']];
+  var lastP=-1;
+  function upd(re){
+    var S=SOLV[sv],pol=stat==='polar';
+    $('#tl-sol').value=sv;
+    $('#tl-sb').style.width=(S[1]*9.8)+'%';$('#tl-sn').textContent=S[1].toFixed(1)+' · '+S[2];
+    $$('[data-sp]').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.sp===stat?'true':'false')});
+    $('#tl-psi').setAttribute('opacity',pol?.5:0);$('#tl-pc18').setAttribute('opacity',pol?0:.55);
+    $('#tl-svt').textContent='Solvent: '+S[0]+' · plate: '+(pol?'polar silica':'non-polar C18');
+    $('#tl-hint').textContent=pol?'Polar silica holds polar compounds back (low Rf). Non-polar compounds travel with the solvent (high Rf).':'Non-polar C18 holds non-polar compounds back (low Rf). Polar compounds travel with the polar solvent (high Rf), so the order flips.';
+    for(var k=0;k<3;k++){var m=CMP[cm[k]];$('#tl-cb'+k).style.width=(m[1]*10)+'%';$('#tl-cn'+k).textContent=m[1]+' · '+m[2];$('#tl-n'+k).textContent='· '+m[0]}
+    if(re){s.time=9.7;s.playing=true;var pb=$('[data-play="tl"]');if(pb)pb.textContent='Pause'}
+    s.dirty=true;
+  }
+  $('#tl-sol').addEventListener('change',function(){sv=+this.value;upd(true)});
+  $$('[data-sp]').forEach(function(b){b.addEventListener('click',function(){stat=b.dataset.sp;upd(true)})});
+  $$('[data-cmp]').forEach(function(el){el.addEventListener('change',function(){cm[+el.dataset.cmp]=+el.value;upd(true)})});
+  upd(false);
+  s.tick=function(t){
+    if(t>END){s.time=END;t=END}
+    var c=t;
+    var Y=c<7.2?-85:(c<9.7?lerp(-85,0,ease((c-7.2)/2.5)):(c<21.7?0:(c<23.7?lerp(0,-85,ease((c-21.7)/2)):-85)));
+    $('#tl-plate').setAttribute('transform','translate(0 '+Y.toFixed(2)+')');
+    var lc=c<9.7?0:(c<10.7?ease(c-9.7):(c<20.7?1:(c<21.7?1-ease(c-20.7):0)));
+    $('#tl-lid').setAttribute('transform','translate('+(300*(1-lc)).toFixed(1)+' '+(-60*(1-lc)).toFixed(1)+')');
+    setA($('#tl-bl'),{x2:lerp(46,294,clamp(c/1))});
+    xm.setAttribute('opacity',clamp((c-.8)/.4));
+    labs.forEach(function(e,i){e.setAttribute('opacity',clamp((c-1.0-.2*i)/.3))});
+    var cap=$('#tl-cap');
+    if(c>=1.2&&c<7.4){
+      var k=Math.min(3,Math.floor((c-1.2)/1.5)),lt=(c-1.2)-1.5*k,px=k===0?LX[0]+45:LX[k-1],x=lerp(px,LX[k],ease(lt/.6)),y=BASE-14+12*Math.sin(Math.PI*clamp((lt-.6)/.4));
+      cap.setAttribute('opacity',1);cap.setAttribute('transform','translate('+x.toFixed(1)+' '+y.toFixed(1)+')');
+      var dp=$('#tl-drop');dp.style.fill=DROP[k];dp.setAttribute('opacity',lt<1?1:0);
+    }else cap.setAttribute('opacity',0);
+    var u=clamp((c-T0)/RUN),fy=lerp(322,50,Math.sqrt(u)),Fpx=Math.max(0,BASE-fy);
+    var wetOn=c>=9.2?1:0;
+    setA($('#tl-wet'),{y:fy,height:345-fy,opacity:wetOn});
+    setA($('#tl-front'),{y1:fy,y2:fy,opacity:(c>=9.2&&c<23.7)?1:0});
+    spots.forEach(function(p){
+      var ts=1.2+1.5*p.lane,g=ease((c-ts-.7)/.4),cy=BASE-rf(COMP[p.k])*Fpx;
+      setA(p.e,{cy:cy,rx:9*g,ry:6.5*g});
+      setA(p.r,{cy:cy,opacity:g>.5?ease((c-25.2)/1.2)*.85:0});
+    });
+    setA($('#tl-pf'),{x2:lerp(40,300,ease((c-23.7)/1)),opacity:c>=23.7?.8:0});
+    $('#tl-F').textContent=(Fpx/20).toFixed(1);
+    COMP.forEach(function(cm,i){$('#tl-d'+i).textContent=(rf(cm)*Fpx/20).toFixed(1);$('#tl-r'+i).textContent=rf(cm).toFixed(2)});
+    var dim=$('#tl-dim'),gd=$('#tl-gd');
+    if(sel>=0){
+      var sy=BASE-rf(COMP[sel])*Fpx;
+      dim.setAttribute('visibility','visible');gd.setAttribute('visibility','visible');
+      setA(gd,{y1:sy,y2:sy});
+      var dl=$('#tl-dl');dl.style.stroke='var('+COMP[sel].v+')';setA(dl,{y1:BASE,y2:sy});setA($('#tl-fl'),{y1:BASE,y2:fy});
+      setA($('#tl-dt'),{y:(BASE+sy)/2+5});setA($('#tl-ft'),{y:(BASE+fy)/2+5});
+    }else{dim.setAttribute('visibility','hidden');gd.setAttribute('visibility','hidden')}
+    var pi=0;names.forEach(function(n,i){if(c>=n[0])pi=i});
+    if(pi!==lastP){lastP=pi;var el=$('#tl-phase');if(el)el.textContent=names[pi][1]}
+  };
+}
+
+initFilt();initRC();initEv();initSD();initFD();initEX();initSL();initCL();initCR();initGC();initTL();
+renderPractice();
+TABS.forEach(function(t){hlNode($('#p-'+t[0]))});
+if(reduce){$$('[data-play]').forEach(function(b){b.textContent='Play'})}
+requestAnimationFrame(function(n){last=n;frame(n)});
+})();
+</script>
+
+</body></html>
